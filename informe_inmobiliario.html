@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mercado inmobiliario de La Habana: informe v2</title>
+<style>
+:root{
+  --bg:#f5f7f6; --card:#ffffff; --ink:#15262b; --muted:#5b6d72; --line:#dbe3e2;
+  --sea:#0e5a6b; --sea2:#5d9aa6; --sun:#c98a0a; --warn:#fff4d6; --warnink:#5a4100;
+  --s0:#0e5a6b; --s1:#3f8795; --s2:#8dbbc4; --s3:#c98a0a;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0f1a1d; --card:#17262a; --ink:#e8f0ef; --muted:#9db1b5; --line:#2a3d42;
+  --sea:#58b4c4; --sea2:#3a7f8c; --sun:#e5b13a; --warn:#3a2f10; --warnink:#f0dba0;
+  --s0:#58b4c4; --s1:#3a8c9b; --s2:#2b6470; --s3:#e5b13a; }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 16px 40px}
+main{max-width:720px;margin:0 auto}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:700;line-height:1.2}
+header{padding:36px 0 20px}
+h1{font-size:clamp(1.7rem,6vw,2.4rem);margin-bottom:10px}
+.sub{color:var(--muted)}
+h2{font-size:1.3rem;margin-bottom:6px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-top:16px}
+.lead{color:var(--muted);margin-bottom:14px;font-size:.95rem}
+.note{background:var(--warn);color:var(--warnink);border-radius:8px;padding:10px 14px;margin-top:14px;font-size:.92rem}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:6px}
+.kpi{border-left:3px solid var(--sea);padding:2px 0 2px 12px}
+.kpi b{display:block;font-size:1.4rem;font-family:Georgia,serif}
+.kpi span{color:var(--muted);font-size:.85rem}
+ul.bars,ul.legend{list-style:none}
+ul.bars li{margin-bottom:14px}
+.rowhead{display:flex;justify-content:space-between;gap:10px;font-size:.95rem}
+.rowhead small{color:var(--muted)}
+.track{position:relative;height:20px;margin-top:4px}
+.bar{position:absolute;left:0;top:0;height:12px;background:var(--sea);border-radius:0 3px 3px 0;min-width:2px}
+.bar.alt{background:var(--sea2)}
+.band{position:absolute;top:14px;height:6px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--sun) 0 4px,transparent 4px 7px)}
+.key{font-size:.85rem;color:var(--muted);margin-top:4px}
+.key i{display:inline-block;width:28px;height:6px;vertical-align:middle;margin-right:6px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--sun) 0 4px,transparent 4px 7px)}
+.stack{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 12px}
+.seg.s0,.sw.s0{background:var(--s0)} .seg.s1,.sw.s1{background:var(--s1)}
+.seg.s2,.sw.s2{background:var(--s2)} .seg.s3,.sw.s3{background:var(--s3)}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;vertical-align:-1px}
+ul.legend li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:420px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+td:nth-child(n+2),th:nth-child(n+2){text-align:right}
+p+p,ul.plain{margin-top:10px}
+ul.plain{padding-left:20px} ul.plain li{margin-bottom:6px}
+footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:24px}
+@media (min-width:600px){.kpis{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Qué determina el precio de una casa en La Habana</h1>
+  <p class="sub">Análisis de 92 anuncios de venta publicados en Revolico, recopilados el 10/10/2026. Esta versión corrige un error de extracción de precios de la primera.</p>
+</header>
+
+<section aria-labelledby="resumen">
+  <h2 id="resumen">Resumen</h2>
+  <div class="kpis">
+    <div class="kpi"><b>92</b><span>anuncios válidos</span></div>
+    <div class="kpi"><b>$25,000</b><span>precio mediano</span></div>
+    <div class="kpi"><b>$66,298</b><span>promedio, subido por pocos anuncios caros</span></div>
+    <div class="kpi"><b>$5,000 a $750,000</b><span>rango de precios</span></div>
+  </div>
+  <p style="margin-top:14px">La mitad de los anuncios cuesta menos de $25,000, pero el promedio llega a $66,298 porque unas pocas casas de playa superan los $250,000. Por eso este informe usa la <b>mediana</b>.</p>
+</section>
+
+<section aria-labelledby="zonas">
+  <h2 id="zonas">Precio mediano por zona</h2>
+  <p class="lead">Solo zonas con 3 anuncios o más. La franja punteada es el rango de cierre que dio la inmobiliaria Reyra Homes en la entrevista.</p>
+  <ul class="bars">
+<li><div class="rowhead"><span>Plaza <small>19 anuncios</small></span><b>$60,000</b></div>
+<div class="track"><span class="bar" style="width:75.0%"></span><span class="band" style="left:62.5%;width:25.0%"></span></div></li>
+<li><div class="rowhead"><span>Habana del Este <small>6 anuncios</small></span><b>$57,500</b></div>
+<div class="track"><span class="bar" style="width:71.9%"></span></div></li>
+<li><div class="rowhead"><span>Playa <small>20 anuncios</small></span><b>$52,500</b></div>
+<div class="track"><span class="bar" style="width:65.6%"></span><span class="band" style="left:62.5%;width:25.0%"></span></div></li>
+<li><div class="rowhead"><span>Diez de Octubre <small>20 anuncios</small></span><b>$25,000</b></div>
+<div class="track"><span class="bar" style="width:31.2%"></span><span class="band" style="left:18.8%;width:6.2%"></span></div></li>
+<li><div class="rowhead"><span>Cerro <small>6 anuncios</small></span><b>$13,750</b></div>
+<div class="track"><span class="bar" style="width:17.2%"></span><span class="band" style="left:18.8%;width:6.2%"></span></div></li>
+<li><div class="rowhead"><span>Centro Habana <small>8 anuncios</small></span><b>$13,500</b></div>
+<div class="track"><span class="bar" style="width:16.9%"></span><span class="band" style="left:18.8%;width:6.2%"></span></div></li>
+<li><div class="rowhead"><span>Arroyo Naranjo <small>5 anuncios</small></span><b>$11,500</b></div>
+<div class="track"><span class="bar" style="width:14.4%"></span></div></li>
+  </ul>
+  <p class="key"><i></i>Rango de cierre según Reyra Homes</p>
+  <p class="note">Zonas excluidas por tener muy pocos anuncios: Cotorro (1), Guanabacoa (1), Habana Vieja (1), La Lisa (2), San Miguel del Padrón (1), Marianao (2).</p>
+</section>
+
+<section aria-labelledby="tipo">
+  <h2 id="tipo">Precio mediano por tipo de inmueble</h2>
+  <p class="lead">Se muestran los tipos con 3 anuncios o más.</p>
+  <ul class="bars">
+<li><div class="rowhead"><span>Apartamento <small>46 anuncios</small></span><b>$17,500</b></div>
+<div class="track"><span class="bar alt" style="width:35.0%"></span></div></li>
+<li><div class="rowhead"><span>Casa <small>38 anuncios</small></span><b>$27,000</b></div>
+<div class="track"><span class="bar alt" style="width:54.0%"></span></div></li>
+<li><div class="rowhead"><span>Biplanta <small>6 anuncios</small></span><b>$47,500</b></div>
+<div class="track"><span class="bar alt" style="width:95.0%"></span></div></li>
+  </ul>
+</section>
+
+<section aria-labelledby="tramos">
+  <h2 id="tramos">Distribución por tramo de precio</h2>
+  <p class="lead">Tramos definidos por precio publicado en USD.</p>
+  <div class="stack" role="img" aria-label="Distribución por tramo de precio"><span class="seg s0" style="width:32.6%"></span><span class="seg s1" style="width:28.3%"></span><span class="seg s2" style="width:30.4%"></span><span class="seg s3" style="width:8.7%"></span></div>
+  <ul class="legend">
+<li><i class="sw s0"></i>Económico (<15k)<b>30 anuncios (32.6%)</b></li>
+<li><i class="sw s1"></i>Medio (15–40k)<b>26 anuncios (28.3%)</b></li>
+<li><i class="sw s2"></i>Alto (40–100k)<b>28 anuncios (30.4%)</b></li>
+<li><i class="sw s3"></i>Lujo (>100k)<b>8 anuncios (8.7%)</b></li>
+  </ul>
+</section>
+
+<section aria-labelledby="carac">
+  <h2 id="carac">Características y precio</h2>
+  <p class="lead">Precio mediano de los anuncios que mencionan la característica frente a los que no.</p>
+  <div class="scroll"><table>
+    <tr><th>Característica</th><th>Anuncios</th><th>Con</th><th>Sin</th></tr>
+<tr><td>Independiente</td><td>23</td><td>$50,000</td><td>$24,000</td></tr>
+<tr><td>Garaje</td><td>18</td><td>$52,500</td><td>$24,500</td></tr>
+<tr><td>Gas de la calle</td><td>26</td><td>$21,000</td><td>$25,000</td></tr>
+<tr><td>Agua</td><td>19</td><td>$14,000</td><td>$25,000</td></tr>
+<tr><td>Placa libre</td><td>16</td><td>$25,000</td><td>$25,000</td></tr>
+  </table></div>
+  <p class="note">Esto no prueba que el garaje o la casa independiente suban el precio por sí solos. Esas propiedades se concentran en Playa y Plaza, que ya son las zonas más caras. El agua sale “más barata” porque los anuncios de zonas económicas la mencionan más, no porque reste valor.</p>
+</section>
+
+<section aria-labelledby="entrevistas">
+  <h2 id="entrevistas">Contraste con las entrevistas</h2>
+  <p class="lead">Se entrevistó a tres inmobiliarias: Reyra Homes, Casas Habana y Nexo Inmobiliaria.</p>
+  <ul class="plain">
+    <li><b>Los datos coinciden con Reyra Homes en las zonas caras.</b> Playa tiene una mediana de $52,500 y Plaza de $60,000. Reyra Homes habla de $50,000 a $70,000.</li>
+    <li><b>En las zonas económicas hay matices.</b> Centro Habana ($13,500) y Cerro ($13,750) quedan algo por debajo del rango de $15,000 a $20,000. Diez de Octubre ($25,000) queda por encima.</li>
+    <li><b>Los precios publicados no son los de cierre.</b> Reyra Homes estima que los anuncios están entre un 5 % y un 15 % por encima del precio final. Aquí solo se analizan precios publicados.</li>
+    <li><b>Razón de venta.</b> Las tres inmobiliarias coinciden en que la emigración y la reunificación familiar son los motivos principales. Los anuncios casi nunca lo mencionan, por eso no se puede medir con este conjunto de datos.</li>
+    <li><b>Obstáculos legales.</b> Citan los títulos sin actualizar, las herencias sin declarar y el cheque de gerencia.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="cambios">
+  <h2 id="cambios">Qué se corrigió respecto a la versión 1</h2>
+  <p>La primera versión leía mal algunos precios: pegaba el último dígito del texto anterior al precio. Por ejemplo, “Apto 2/4 ... por 46 y29” con precio de $17,000 se leía como $617,000. Eso inflaba Playa y Guanabacoa, y se interpretó como “propiedades de ultralujo”.</p>
+  <div class="scroll" style="margin-top:12px"><table>
+    <tr><th>Indicador</th><th>Versión 1</th><th>Versión 2</th></tr>
+    <tr><td>Precio de Playa</td><td>$617,000 (mediana)</td><td>$52,500 (mediana)</td></tr>
+    <tr><td>Precio promedio general</td><td>$159,776</td><td>$66,298</td></tr>
+    <tr><td>Zona de Santo Suárez</td><td>Asignada a Regla</td><td>Tomada de la ubicación del anuncio</td></tr>
+  </table></div>
+  <p>En la versión 2 el precio se toma solo si aparece junto a “USD” y antes de “hace” o “Destacado”, se descartan valores menores a $1,000 y se eliminan duplicados.</p>
+</section>
+
+<section aria-labelledby="limites">
+  <h2 id="limites">Limitaciones</h2>
+  <ul class="plain">
+    <li>La muestra es pequeña (92 anuncios) y de un solo momento. Las zonas con pocos anuncios cambian mucho con un solo dato.</li>
+    <li>Son precios de oferta, no de venta. Faltan datos de cierre.</li>
+    <li>Los servicios y características salen del texto del anuncio. Si el vendedor no los menciona, aparecen como ausentes aunque existan. Internet no aparece en ningún anuncio.</li>
+    <li>Del total, 42 anuncios (45.7 %) quedaron marcados como “oportunidad”. El criterio de esa marca debe documentarse antes de usarla en conclusiones.</li>
+    <li>Quedan por completar la encuesta a la población y los datos de Facebook y Telegram.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Fuente: Revolico.com, datos extraídos y limpiados con Python. Proyecto de Ciencia de Datos, 1.er año.</p>
+</footer>
+</main>
+</body>
+</html>
