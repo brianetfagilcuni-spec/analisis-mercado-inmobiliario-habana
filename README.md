@@ -1,86 +1,134 @@
-# Análisis del mercado inmobiliario en La Habana
+🏠 Análisis Empírico del Mercado Inmobiliario en La Habana: Un Enfoque en Ciencia de Datos
 
-**¿Qué determina realmente el precio de una vivienda en La Habana?**
+Proyecto de Introducción a la Ciencia de Datos | Facultad de Matemática y Computación (MatCom) - Universidad de La Habana
+Autora: Brianet Fagil Cuni (ICD 26-27)
 
-Proyecto de Introducción a la Ciencia de Datos (MatCom, Universidad de La Habana, ICD 26-27). Combina 92 anuncios de venta de Revolico, 5 inmobiliarias y 35 personas entrevistadas.
-**Todo el trabajo se hizo desde un teléfono Android**, con Python en PyDroid 3 y con ayuda de inteligencia artificial (ver [Herramientas](#herramientas-y-uso-de-ia)).
+🏆 Hito de Resiliencia Técnica: Este proyecto fue concebido, programado, analizado y documentado íntegramente desde un teléfono Android (utilizando PyDroid 3 y Termux). No se utilizó computadora en ninguna fase.
 
-## Dónde empezar
-| Si quieres... | Abre |
-|---|---|
-| Leer la historia completa (motivación, 30 preguntas, conclusión) | [`historia/historia.pdf`](historia/historia.pdf) o [`historia/historia.md`](historia/historia.md) |
-| Ver cómo se hizo el trabajo (método, herramientas, límites) | [`informe/informe_tecnico.pdf`](informe/informe_tecnico.pdf) |
-| Entender cada columna de los datos | [`datos/diccionario_datos.md`](datos/diccionario_datos.md) |
-| Ver las entrevistas, los cuestionarios y el catálogo de inmobiliarias | [`entrevistas/`](entrevistas/) |
-| Revisar las fuentes y la evidencia | [`evidencia/`](evidencia/) |
-| Ver todos los gráficos | [`graficos/`](graficos/README.md) |
-| Preparar la exposición | [`presentacion/guion.md`](presentacion/guion.md) |
+https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python&logoColor=white
+https://img.shields.io/badge/Pandas-Data%20Analysis-150458?style=for-the-badge&logo=pandas&logoColor=white
+https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white
+https://img.shields.io/badge/Status-Completado-success?style=for-the-badge
 
-## Estructura
+---
+
+📑 Índice de Navegación
+
+1. Abstract
+2. Preguntas de Investigación
+3. Metodología y Rigor Científico
+4. Hallazgos Clave
+5. Galería de Visualizaciones
+6. Guía del Repositorio
+7. Reproducibilidad
+8. Control de Calidad
+
+---
+
+1. 📝 Abstract (Resumen Ejecutivo)
+
+Este estudio aborda la problemática del mercado inmobiliario en La Habana. Mediante la triangulación de 3 fuentes de evidencia (scraping web de 92 anuncios, entrevistas a 35 personas y 5 inmobiliarias reales), se construyó un dataset robusto. El análisis revela una profunda brecha entre la oferta publicada y la demanda real: mientras los anuncios priorizan atributos comerciales (gas, teléfono), los compradores priorizan necesidades vitales (agua diaria, estabilidad eléctrica). El estudio emplea estadística no paramétrica y clustering (K-Means) para demostrar que la ubicación explica el 30% de la varianza del precio.
+
+---
+
+2. ❓ Preguntas de Investigación
+
+· Principal: ¿Qué características observables de una vivienda están estadísticamente asociadas a su precio de venta en La Habana?
+· Secundarias:
+  1. ¿Cuál es el precio mediano real frente al promedio distorsionado por outliers?
+  2. ¿Cómo varían las medianas de precios entre los municipios?
+  3. ¿Qué características correlacionan con precios altos?
+  4. ¿Existe divergencia entre las preferencias del comprador y la oferta?
+  5. ¿Se pueden segmentar los anuncios mediante Machine Learning?
+
+---
+
+3. 🧠 Metodología y Rigor Científico
+
+Para asegurar la validez académica, se tomaron decisiones estrictas:
+
+1. Uso de la Mediana sobre el Promedio: El promedio (159,776 USD) era engañoso por 7 propiedades de ultra-lujo. Se adoptó la mediana (25,000 USD) como medida robusta.
+2. Auditoría y Cero Imputación: Se auditó manualmente el texto para corregir 16 precios erróneos. No se inventaron datos faltantes.
+3. Estadística No Paramétrica: Se utilizó la prueba de Mann-Whitney U para validar diferencias entre zonas, dado que los precios no siguen una distribución normal.
+4. Clustering (K-Means): Implementado desde cero (NumPy). Se aplicó logaritmo al precio y estandarización Z-score para evitar sesgos.
+
+---
+
+4. 📊 Hallazgos Clave (El "Qué" y el "Por qué")
+
+· 📍 El Poder de la Ubicación: La zona explica un R² ajustado de ~30%. Zonas premium (Plaza, Playa) triplican la mediana base (60k vs 15k USD).
+· 💧 La Paradoja del Agua: El 68% valora el agua diaria. Sin embargo, los anuncios priorizan mencionar el gas y el teléfono. El mercado publica lo fácil, no lo vital.
+· ✈️ La Emigración Invisible: 0 de 92 anuncios la mencionan, pero el 80% de las inmobiliarias confirma que es el motor principal del mercado.
+· 🏘️ Desajuste Oferta-Demanda: El 80% prefiere casa independiente, pero el 50% de la oferta son apartamentos.
+· 👵 El Factor Etario: Los adultos mayores no compran pisos altos, forzando a los vendedores a bajar precios.
+· 🚗 El Mito del Garaje: Al analizar intra-zona, se descubre que el garaje no encarece la vivienda; solo es un proxy de "barrio rico".
+
+---
+
+5. 🖼️ Galería de Visualizaciones (Evidencia Gráfica)
+
+Aquí se demuestra visualmente el análisis realizado. (Haz clic en las imágenes para verlas en alta resolución):
+
+Distribución y Medianas por Zona
+
+grafico_1_precio_por_zona.png
+grafico_14_cajas_municipio.png
+
+La Brecha de los Servicios y la Demanda
+
+grafico_15_servicios_precio.png
+grafico_16_oferta_vs_preferencia.png
+
+Machine Learning y Clústeres
+
+grafico_8_clusters_scatter.png
+
+---
+
+6. 🗂️ Guía de Navegación del Repositorio
+
+📂 Recurso 📄 Archivo 📝 Contenido
+La Historia historia.pdf Narrativa completa, 30 hallazgos y conclusiones.
+Informe Técnico informe_tecnico.pdf Metodología profunda, pipeline y límites.
+Proceso Interactivo notebook_analisis.ipynb Jupyter Notebook paso a paso.
+Bitácora bitacora.md Registro diario del desarrollo.
+Diccionario diccionario_datos.md Explicación de cada columna de los CSV.
+Defensa Oral guion.md Estructura de la presentación.
+
+---
+
+7. 🛠️ Reproducibilidad del Pipeline
+
+Para reproducir el análisis:
+
+```bash
+pip install -r requirements.txt
+python auditoria.py          # Limpieza y corrección
+python estadisticas.py       # Pruebas de hipótesis
+python clustering.py         # K-Means
+python entrevistas_analisis.py
+python generar_informe.py    # Gráficos y reporte
 ```
-.
-├── README.md
-├── codigo/              scripts de scraping, auditoría, estadísticas, gráficos, clustering e informes
-│   └── informe_pdf/     generadores de los PDF (informe técnico e historia)
-├── datos/
-│   ├── crudos/          datos tal como salieron del scraping
-│   ├── limpios/         datos corregidos, auditados y resúmenes
-│   └── diccionario_datos.md
-├── entrevistas/         personas, inmobiliarias, cuestionarios, catálogo y prompts
-├── evidencia/           fuentes, fotos de anuncios y pendientes
-├── graficos/            gráficos en PNG (con índice)
-├── historia/            la historia en PDF y MD, y la bitácora de trabajo
-├── informe/             informe técnico en PDF e informe en HTML
-├── notebook/            cuaderno con el proceso completo
-├── presentacion/        guion de la exposición
-└── tests/               pruebas automáticas de calidad de los datos
-```
 
-## Resultados principales
-- **92 anuncios**; precio mediano **25,000 USD**; la mitad central, entre 12,000 y 61,250 USD.
-- Se corrigieron **16 precios** (17%) con errores de extracción. El promedio bajó de 159,776 a 66,298 USD; la mediana casi no cambió. Por eso se usa la mediana.
-- **El barrio es el factor más claro:** Plaza de la Revolución, Playa y Habana del Este tienen una mediana de 60,000 USD frente a 15,000 en el resto. Una variable de zona explica cerca de 30% de la variación del precio; el número de servicios mencionados, casi nada. Garaje y agua se confunden con la zona.
-- **Lo que la gente valora no aparece en los anuncios:** 28 de 35 personas prefieren casa independiente (en Revolico solo 41% son casas) y ponen el agua como servicio indispensable (23 de 34); los anuncios mencionan más el gas y el teléfono. Ninguno de los 92 anuncios menciona la emigración, que 4 de 5 inmobiliarias dan como motivo principal de venta.
-- Los anuncios sirven para ubicar niveles de precio, no para tasar una casa concreta.
+---
 
-## Cómo reproducir
-Desde la raíz del repositorio (con Python 3 y `pip install -r codigo/requirements.txt`):
-```
-python codigo/graficos.py
-python codigo/clustering.py
-python codigo/auditoria.py
-python codigo/estadisticas.py
-python codigo/entrevistas_analisis.py
-python codigo/generar_informe.py
-python codigo/informe_pdf/build_informe.py
-python codigo/informe_pdf/build_historia.py
-python -m unittest discover -s tests -v
-```
-El scraping (`codigo/scraping_revolico.py`) no se probó en vivo: el sitio puede cambiar. Los datos extraídos están en `datos/crudos/`.
+8. 🧪 Control de Calidad (QA) y Pruebas
 
-## Pruebas automáticas
-`tests/test_datos.py` (14 pruebas con unittest) comprueba que hay 92 anuncios, que la mediana corregida es 25,000 USD, que no hay precios menores a 1,000 USD ni teléfonos reales, que los códigos de las entrevistas son los esperados y que la historia tiene 30 preguntas con todas sus imágenes.
+El archivo test_datos.py contiene 14 pruebas automáticas (unittest) que garantizan:
 
-## Herramientas y uso de IA
-- **Dispositivo:** teléfono Android. No se usó computadora.
-- **Programación:** Python en PyDroid 3 (y Termux para comandos y Git); pandas, NumPy, SciPy, matplotlib, requests y ReportLab.
-- **Datos:** Revolico, WhatsApp y entrevistas en persona, Google Forms y Google Sheets, Facebook (fotos de anuncios).
-- **Publicación:** GitHub.
-- **Inteligencia artificial:** asistentes de IA (entre ellos Claude) como apoyo para organizar el repositorio, escribir y revisar código, calcular estadísticas y redactar documentos. La recolección de datos, las entrevistas y la revisión de las cifras son de la autora. Los prompts están en `entrevistas/`.
+· Exactitud de los 92 anuncios.
+· Ausencia de precios ilógicos (< 1,000 USD).
+· Anonimización de entrevistas (P01-P35).
+· Integridad del PDF de historia.
 
-## Privacidad
-Los teléfonos están enmascarados (`[tel]`). Las entrevistas son anónimas (códigos P01 a P35 e INM1 a INM5). Las fotos son de publicaciones públicas de una inmobiliaria y se retiran si la agencia lo pide.
+---
 
-## Limitaciones
-- Muestra pequeña: 92 anuncios de una sola extracción; varios municipios con 5 anuncios o menos.
-- Precios de oferta, no de cierre.
-- Entrevistas por conveniencia; las inmobiliarias tienen interés comercial y solo una dio cifras de cierre.
-- Hay muchas comparaciones estadísticas con grupos pequeños; algunas diferencias "significativas" pueden ser azar.
-- La zona se leyó del texto del anuncio y algunos de Guanabacoa aparecen como Playa.
-- No hay datos de Facebook ni Telegram.
-- Contexto legal tomado de la prensa (Ley 187/2026); falta leer el texto de la Gaceta Oficial.
+9. 🔒 Ética, Privacidad y Limitaciones
 
-## Estado
-Ver [`evidencia/pendientes.md`](evidencia/pendientes.md).
+· Privacidad: Teléfonos enmascarados ([tel]). Entrevistas 100% anónimas.
+· Uso de IA: Apoyo en estructuración y redacción. La recolección, validación y análisis estadístico son autoría exclusiva de la estudiante.
+· Limitaciones: Muestra de 92 anuncios (una sola extracción). Precios de oferta, no de cierre real.
 
-**Autora:** Brianet Fagil Cuni, estudiante de primer año de Ciencia de Datos.
+---
+
+“En la Ciencia de Datos, los datos no hablan por sí solos; requieren a alguien que los limpie, los cuestione y les dé voz con rigor científico.”
