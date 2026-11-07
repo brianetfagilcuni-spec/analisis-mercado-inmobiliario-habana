@@ -1,0 +1,6 @@
+modelo,r2_ajustado
+Solo zona alta,0.304
+Solo n.º de servicios,0.007
+Solo tipo (casa/biplanta),0.08
+Zona + tipo,0.381
+Zona + servicios + tipo,0.374

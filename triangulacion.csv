@@ -1,0 +1,3 @@
+fuente,n,p25,mediana,p75,promedio
+"Extracción 1 (92 anuncios, con descripción)",92,12000.0,25000.0,61250.0,66298.0
+Extracción 2 (solo título y precio),78,15250.0,32500.0,80000.0,70733.0

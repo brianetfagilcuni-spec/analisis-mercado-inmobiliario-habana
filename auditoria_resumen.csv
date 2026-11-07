@@ -1,0 +1,13 @@
+indicador,valor
+Anuncios analizados,92.0
+Precios corregidos (el CSV tenía un valor distinto al del anuncio),16.0
+Anuncios con más de un precio distinto en el texto,4.0
+Anuncios con zona distinta al municipio de Revolico,10.0
+Anuncios con zona sin asignar ('Otra zona'),13.0
+Anuncios casi duplicados (mismo texto y municipio),2.0
+Anuncios sin descripción (solo teléfono),12.0
+Precio promedio original (USD),159776.0
+Precio promedio corregido (USD),66298.0
+Precio mediano original (USD),29500.0
+Precio mediano corregido (USD),25000.0
+Precio mediano corregido sin duplicados (USD),25000.0
