@@ -1,0 +1,26 @@
+codigo,tipo,tema,respuesta
+INM1,inmobiliaria,negociación,Los precios publicados casi nunca son de cierre; se rebaja entre 5% y 15%.
+INM1,inmobiliaria,precios,"Casa típica en La Habana cierra entre 18,000 y 30,000 USD. Playa y Plaza 50,000-70,000. Centro Habana, Diez de Octubre y Cerro 15,000-20,000."
+INM1,inmobiliaria,propósito del comprador,"La mayoría compra para vivir, muchas veces con dinero de familiares en el exterior. La inversión para alquilar se ve poco: la ley limita cuántas viviendas puede tener una persona y el turismo bajó."
+INM1,inmobiliaria,factores de valor,"Lo que más pesa es la zona; luego agua diaria, corriente estable (circuito priorizado o soterrado) y gas de la calle. Patio y garaje aportan valor en casas independientes."
+INM1,inmobiliaria,motivo de venta,"Emigración es la razón principal. También necesidad de dinero, querer una casa más grande o personas mayores que la sienten grande."
+INM1,inmobiliaria,documentos problemáticos,"Título no actualizado o que no coincide con la casa; herencias sin declaratoria de herederos; casas sin inscribir en el Registro de la Propiedad; litigios o cargas (usufructos, embargos)."
+INM1,inmobiliaria,canales,Publican en Facebook y Revolico. Casi todas las consultas vienen de Revolico. Preparan sitio web propio.
+INM2,inmobiliaria,precios,Dice que el precio es variable según zona y objetivo del propietario; no dio cifras.
+INM2,inmobiliaria,tiempo de venta,Tiene viviendas en venta desde 2025 (más de un año). Plaza y Playa se venden con más rapidez.
+INM2,inmobiliaria,motivo de venta,Varios motivos: emigración y compraventa de otra vivienda. Casi nadie permuta ya.
+INM3,inmobiliaria,precios,"Depende del cliente; el precio promedio va de 40,000 a 180,000 USD."
+INM3,inmobiliaria,propósito del comprador,Terrenos y casas para alquilar y sacarles provecho.
+INM3,inmobiliaria,factores de valor,El lugar.
+INM3,inmobiliaria,motivo de venta,Irse del país o comprar algo mejor.
+INM3,inmobiliaria,canales,"Revolico, Casas Oasis, Facebook y catálogo digital."
+INM4,inmobiliaria,precios,No tiene estadísticas; dice que el precio es superior (sin más detalle).
+INM4,inmobiliaria,propósito del comprador,"En su caso, vivienda para vivir."
+INM4,inmobiliaria,factores de valor,"Agua, gas, internet, luz y garaje."
+INM4,inmobiliaria,motivo de venta,"En su caso, reunificación familiar. Dice que hay muchos casos por emigración."
+INM4,inmobiliaria,forma de pago,Cheque de gerencia.
+INM4,inmobiliaria,canales,Facebook y Revolico.
+P04,persona,comentario,"Las 4 variables (ubicación, espacio, servicios y precio) van unidas; la luz es algo con lo que hay que lidiar fuera del circuito prioritario (DAF)."
+P07,persona,pregunta 1,No se busca una sola cosa en específico; todo importa.
+P07,persona,pregunta 2,"Depende del gusto de cada cual; nació en Playa y es la que le gusta (no indicó cuál es la más cara, por eso la dejé en blanco)."
+P07,persona,comentario,Considera que las preguntas son subjetivas y dependen de cada persona.

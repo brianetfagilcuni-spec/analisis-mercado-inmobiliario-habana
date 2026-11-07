@@ -1,0 +1,6 @@
+,count,mean,median,min,max
+precio_cierre_zonas_caras_usd,1.0,60000.0,60000.0,60000.0,60000.0
+precio_cierre_zonas_baratas_usd,1.0,17500.0,17500.0,17500.0,17500.0
+rebaja_pct,2.0,10.0,10.0,10.0,10.0
+meses_venta,1.0,12.0,12.0,12.0,12.0
+aumento_valor_pct,0.0,,,,
