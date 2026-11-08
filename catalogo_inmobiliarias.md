@@ -4,13 +4,15 @@ Una ficha por inmobiliaria, con código. Los nombres comerciales y teléfonos se
 
 ## Resumen
 
-| Código | Cuestionario | Qué aportó | Catálogo de viviendas | Evidencia |
-|---|---|---|---|---|
-| INM1 | 5 preguntas | Cifras de cierre por zona, rebaja, motivos, documentos problemáticos, canales | No compartió | Chat de WhatsApp [guardar captura] |
-| INM2 | 6 preguntas | Zonas caras y baratas, rebaja ~10%, tiempo de venta, catálogo | **230 viviendas: 150 casas (65.2%) y 80 apartamentos (34.8%)**, dicho en la entrevista; compartió un enlace | Chat [guardar captura] |
-| INM3 | 5 preguntas | Precios (40,000-180,000 USD), motivo, canales | Enlace de catálogo digital recibido cortado: **no disponible** | Chat [guardar captura] |
-| INM4 | 6 preguntas | Texto libre, sin cifras: servicios, forma de pago, motivos | No compartió | Chat [guardar captura] |
-| INM5 | Cuestionario de personas | Zona más cara (Vedado) y servicio indispensable (agua) | No aplica | Respuesta P02 |
+| Código | Cuestionario | Qué aportó | Evidencia |
+|---|---|---|---|
+| INM1 | 5 preguntas | Cifras de cierre por zona, rebaja, motivos, documentos problemáticos, canales | Conversación de WhatsApp (se conserva de forma privada) |
+| INM2 | 6 preguntas | Zonas caras y baratas, rebaja ~10%, tiempo de venta; composición de su catálogo según la entrevista: 230 viviendas (150 casas, 65.2%, y 80 apartamentos, 34.8%) | Conversación de WhatsApp (privada) |
+| INM3 | 5 preguntas | Precios (40,000-180,000 USD), compradores, motivo de venta, canales | Conversación de WhatsApp (privada) |
+| INM4 | 6 preguntas | Texto libre, sin cifras: servicios, forma de pago, motivos | Conversación de WhatsApp (privada) |
+| INM5 | Cuestionario de personas | Zona más cara (Vedado) y servicio indispensable (agua) | Respuesta P02 |
+
+**Catálogos de viviendas:** de las cinco inmobiliarias, **solo una compartió su catálogo**; las otras cuatro prefirieron no hacerlo. Para proteger la identidad de las agencias, no se indica cuál fue. Su catálogo (enlace de Facebook y fotos de seis anuncios) está en la evidencia.
 
 ## Fichas
 
@@ -36,7 +38,6 @@ Una ficha por inmobiliaria, con código. Los nombres comerciales y teléfonos se
 - **Compradores:** terrenos y casas para alquilar. **Qué pesa más:** el lugar.
 - **Motivo de venta:** irse del país o comprar algo mejor.
 - **Canales:** Revolico, Casas Oasis, Facebook y catálogo digital.
-- **Falta:** la respuesta a la pregunta 5 y el catálogo (el enlace llegó cortado).
 
 ### INM4
 - **Sin cifras ni estadísticas;** respondió desde su experiencia.
@@ -48,12 +49,8 @@ Una ficha por inmobiliaria, con código. Los nombres comerciales y teléfonos se
 - Respondió el cuestionario de personas (antes P02). Zona más cara: Vedado. Servicio indispensable: agua.
 - Se cuenta como inmobiliaria y no se duplica en los gráficos de personas.
 
-## Enlace de una inmobiliaria
-La autora compartió el enlace de la página de Facebook de una de las inmobiliarias: https://www.facebook.com/share/1BvYySV94j/. Las fotos de sus anuncios están en [`evidencia/anuncios_fotografias.md`](../evidencia/anuncios_fotografias.md). [Indicar a qué código (INM1 a INM5) corresponde. Si la agencia no ha aceptado aparecer, quitar el enlace: identifica a la inmobiliaria.]
-
-## Qué falta para completar el catálogo
-- [ ] Capturas de cada conversación, guardadas fuera del repositorio, con permiso.
-- [ ] Catálogo de INM2 para verificar las 230 viviendas.
-- [ ] Catálogo de INM3 (pedir las capturas o el enlace completo). Si no llega, queda "no disponible"; no se inventan porcentajes.
-- [ ] Transcribir el audio de la inmobiliaria que lo envió y añadirlo a `respuestas_cualitativas.csv`.
-- [ ] Confirmar con cada agencia que acepta aparecer, con su nombre o con código.
+## Evidencia, catálogos y privacidad
+- **Solo una de las cinco inmobiliarias compartió su catálogo.** Su enlace de Facebook (https://www.facebook.com/share/1BvYySV94j/) y las capturas de seis de sus anuncios están en [`anuncios_fotografias.md`](anuncios_fotografias.md).
+- **Las otras cuatro prefirieron no compartir sus catálogos.** Se respetó su decisión para proteger la información de cada agencia, y por eso las cifras de catálogo (como las 230 viviendas de INM2) son lo que dijeron en la entrevista y no una verificación propia.
+- **Muchas personas pidieron que no apareciera su nombre ni su número.** Esos datos de contacto se conservan de forma privada y no se publican; en el repositorio solo hay los códigos P01 a P35 e INM1 a INM5.
+- Las conversaciones originales (WhatsApp) y las capturas se guardan fuera del repositorio.

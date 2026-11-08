@@ -1,10 +1,10 @@
-"""Pruebas automáticas de calidad. Ejecutar desde la raíz del repositorio:
-    python -m unittest discover -s tests -v
+"""Pruebas automáticas de calidad. Ejecutar desde la carpeta del repositorio:
+    python -m unittest test_datos -v
 Comprueban que los datos y la documentación coinciden con las cifras que se publican."""
 import os, re, glob, unittest
 import pandas as pd
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.abspath(__file__))
 def p(*a): return os.path.join(ROOT, *a)
 def leer(ruta, **kw):
     with open(ruta, encoding="utf-8", **kw) as fh:
@@ -16,8 +16,8 @@ MUNICIPIOS_HABANA = {"Playa", "Plaza de la Revolución", "Centro Habana", "Haban
 class TestAnuncios(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.pro = pd.read_csv(p("datos", "limpios", "inmuebles_habana_pro.csv"))
-        cls.aud = pd.read_csv(p("datos", "limpios", "inmuebles_auditados.csv"))
+        cls.pro = pd.read_csv(p("inmuebles_habana_pro.csv"))
+        cls.aud = pd.read_csv(p("inmuebles_auditados.csv"))
 
     def test_92_anuncios(self):
         self.assertEqual(len(self.pro), 92)
@@ -47,13 +47,13 @@ class TestAnuncios(unittest.TestCase):
 
     def test_sin_telefonos_reales(self):
         patron = re.compile(r"(?<!\d)(?:\+?53[ -]?)?[5-7]\d{7}(?!\d)")
-        for f in glob.glob(p("**", "*.csv"), recursive=True) + glob.glob(p("**", "*.md"), recursive=True):
+        for f in glob.glob(p("*.csv")) + glob.glob(p("*.md")):
             txt = re.sub(r"https?://\S+", "", leer(f, errors="ignore"))
-            self.assertIsNone(patron.search(txt), f"posible teléfono en {os.path.relpath(f, ROOT)}")
+            self.assertIsNone(patron.search(txt), f"posible teléfono en {os.path.basename(f)}")
 
 class TestEntrevistas(unittest.TestCase):
     def test_personas(self):
-        d = pd.read_csv(p("entrevistas", "personas.csv"))
+        d = pd.read_csv(p("personas.csv"))
         self.assertEqual(len(d), 35)
         self.assertEqual(list(d["codigo"]), [f"P{i:02d}" for i in range(1, 36)])
         for col, validas in [("p3_tipo", "ABC"), ("p5_precios", "ABC"), ("p4_servicio", "ABCDT"), ("p1_valora", "ABCDT")]:
@@ -61,29 +61,30 @@ class TestEntrevistas(unittest.TestCase):
                 self.assertTrue(set(v).issubset(set(validas)), f"{col}: valor inesperado {v}")
 
     def test_inmobiliarias(self):
-        d = pd.read_csv(p("entrevistas", "inmobiliarias.csv"))
+        d = pd.read_csv(p("inmobiliarias.csv"))
         self.assertEqual(list(d["codigo"]), [f"INM{i}" for i in range(1, 6)])
 
     def test_respuestas_cualitativas(self):
-        d = pd.read_csv(p("entrevistas", "respuestas_cualitativas.csv"))
+        d = pd.read_csv(p("respuestas_cualitativas.csv"))
         self.assertEqual(len(d), 25)
         self.assertTrue(set(d["tipo"]).issubset({"persona", "inmobiliaria"}))
 
 class TestDocumentacion(unittest.TestCase):
     def test_historia_tiene_30_preguntas(self):
-        t = leer(p("historia", "historia.md"))
+        t = leer(p("historia.md"))
         nums = [int(n) for n in re.findall(r"^\*\*(\d+)\. ", t, re.M)]
         self.assertEqual(nums, list(range(1, 31)))
 
-    def test_imagenes_de_la_historia_existen(self):
-        t = leer(p("historia", "historia.md"))
-        for ruta in re.findall(r"!\[.*?\]\((.*?)\)", t):
-            self.assertTrue(os.path.exists(os.path.normpath(p("historia", ruta))), f"falta {ruta}")
+    def test_imagenes_existen(self):
+        for md in ["historia.md", "informe_tecnico.md", "anuncios_fotografias.md"]:
+            for ruta in re.findall(r"!\[.*?\]\((.*?)\)", leer(p(md))):
+                self.assertTrue(os.path.exists(p(ruta)), f"falta {ruta} (en {md})")
 
     def test_archivos_clave(self):
-        for f in ["README.md", "datos/diccionario_datos.md", "historia/historia.md", "historia/historia.pdf", "informe/informe_tecnico.pdf",
-                  "entrevistas/catalogo_inmobiliarias.md", "entrevistas/cuestionarios.md", "evidencia/fuentes.md", "codigo/requirements.txt"]:
-            self.assertTrue(os.path.exists(p(*f.split("/"))), f"falta {f}")
+        for f in ["README.md", "diccionario_datos.md", "historia.md", "historia.pdf", "informe_tecnico.md", "informe_tecnico.pdf",
+                  "bitacora.md", "catalogo_inmobiliarias.md", "tabla_entrevistas.md", "cuestionarios.md", "fuentes.md",
+                  "anuncios_fotografias.md", "requirements.txt", "index.html", "plan_campana_comunicacion.md", "plan_campana_comunicacion.pdf"]:
+            self.assertTrue(os.path.exists(p(f)), f"falta {f}")
 
 if __name__ == "__main__":
     unittest.main()

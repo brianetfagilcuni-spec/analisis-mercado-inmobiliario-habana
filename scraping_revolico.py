@@ -62,5 +62,5 @@ for i, url in enumerate(enlaces, 1):
     time.sleep(PAUSA)
 
 # 3. Guardar
-pd.DataFrame(filas).to_csv("datos/crudos/revolico_scraping_nuevo.csv", index=False)
-print("Guardado: datos/crudos/revolico_scraping_nuevo.csv")
+pd.DataFrame(filas).to_csv("revolico_scraping_nuevo.csv", index=False)
+print("Guardado: revolico_scraping_nuevo.csv")

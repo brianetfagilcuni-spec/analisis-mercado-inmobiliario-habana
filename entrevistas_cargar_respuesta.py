@@ -3,7 +3,7 @@ Pega el texto como te lo mandan. Acepta: 1A 2B 3C | 1-c 2-b | 1AB (varias opcion
 Si falta alguna pregunta, te pregunta si la dejas en blanco. Códigos: P01, P02... (sin nombres ni teléfonos)."""
 import csv, re
 
-RUTA = "entrevistas/personas.csv"
+RUTA = "personas.csv"
 validas = {"1": "ABCD", "2": "ABCD", "3": "ABC", "4": "ABCD", "5": "ABC"}
 
 n = sum(1 for _ in open(RUTA, encoding="utf-8")) - 1

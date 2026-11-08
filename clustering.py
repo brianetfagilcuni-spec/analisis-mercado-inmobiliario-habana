@@ -7,7 +7,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # ---------- 1. Cargar y corregir precio ----------
-df = pd.read_csv("datos/limpios/inmuebles_habana_pro.csv")
+df = pd.read_csv("inmuebles_habana_pro.csv")
 
 def precio_real(txt, fallback):
     m = re.search(r'(\d{1,3}(?:,\d{3})+|\d+)\s*USD', str(txt))
@@ -49,7 +49,7 @@ plt.figure(figsize=(6, 4))
 plt.plot(list(ks), inercias, marker="o", color="#2a5298")
 plt.xlabel("Número de clusters (k)"); plt.ylabel("Inercia")
 plt.title("Método del codo")
-plt.tight_layout(); plt.savefig("graficos/grafico_7_codo.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_7_codo.png", dpi=130); plt.close()
 
 # ---------- 5. Clustering final (k = 3) ----------
 K = 3
@@ -75,8 +75,8 @@ perfil = df.groupby("Segmento").agg(
 print(perfil)
 print("\nZonas más frecuentes por segmento:")
 print(pd.crosstab(df["Zona_Limpia"], df["Segmento"]).sort_values("Lujo", ascending=False).head(8))
-perfil.to_csv("datos/limpios/perfil_clusters.csv")
-df.to_csv("datos/limpios/con_clusters.csv", index=False)
+perfil.to_csv("perfil_clusters.csv")
+df.to_csv("con_clusters.csv", index=False)
 
 # ---------- 7. Gráficos ----------
 colores = {"Poco detallado": "#7f8c8d", "Detallado": "#27ae60", "Lujo": "#c0392b"}
@@ -89,11 +89,11 @@ plt.xlabel("Cantidad de servicios/características mencionadas")
 plt.ylabel("Precio USD (escala log)")
 plt.title("Segmentos de anuncios (K-Means, k=3)")
 plt.legend()
-plt.tight_layout(); plt.savefig("graficos/grafico_8_clusters_scatter.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_8_clusters_scatter.png", dpi=130); plt.close()
 
 plt.figure(figsize=(6, 4))
 perfil["Precio_mediano"].plot(kind="bar", color=[colores[s] for s in perfil.index])
 plt.title("Precio mediano por segmento (USD)"); plt.xlabel("")
 plt.xticks(rotation=0)
-plt.tight_layout(); plt.savefig("graficos/grafico_9_precio_por_segmento.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_9_precio_por_segmento.png", dpi=130); plt.close()
 print("Listo")

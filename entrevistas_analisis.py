@@ -4,14 +4,14 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-OUT = "graficos/entrevistas/"
+OUT = ""
 
 def leer(ruta):
     df = pd.read_csv(ruta)
     return df if len(df) else None
 
 # ================= RESUMEN DE MUESTRA =================
-_P, _I = pd.read_csv("entrevistas/personas.csv"), pd.read_csv("entrevistas/inmobiliarias.csv")
+_P, _I = pd.read_csv("personas.csv"), pd.read_csv("inmobiliarias.csv")
 filas = [("Cuestionario de personas (5 preguntas)", "total entrevistados", len(_P)),
          ("Cuestionario de personas (5 preguntas)", "de ellos gestoras", int((_P["rol"] == "gestora").sum()))]
 for c in ["p1_valora", "p2_zona_cara", "p3_tipo", "p4_servicio", "p5_precios"]:
@@ -19,11 +19,11 @@ for c in ["p1_valora", "p2_zona_cara", "p3_tipo", "p4_servicio", "p5_precios"]:
 filas.append(("Inmobiliarias / gestoras", "total entrevistadas", len(_I)))
 for c in ["rebaja_pct", "meses_venta", "precio_cierre_zonas_caras_usd", "catalogo_casas_pct"]:
     filas.append(("Inmobiliarias / gestoras", f"respondieron {c}", int(pd.to_numeric(_I[c], errors="coerce").notna().sum())))
-pd.DataFrame(filas, columns=["grupo", "dato", "n"]).to_csv("entrevistas/resumen_muestra.csv", index=False)
+pd.DataFrame(filas, columns=["grupo", "dato", "n"]).to_csv("resumen_muestra.csv", index=False)
 print(f"MUESTRA: {len(_P)} en cuestionario de personas (incluye {int((_P['rol']=='gestora').sum())} gestora) | {len(_I)} inmobiliarias/gestoras")
 
 # ================= PERSONAS =================
-P = leer("entrevistas/personas.csv")
+P = leer("personas.csv")
 if P is None:
     print("personas.csv está vacío: aún no hay respuestas.")
 else:
@@ -58,7 +58,7 @@ else:
     print(f"Gráficos de personas listos (n={n}).")
 
 # ================= INMOBILIARIAS =================
-I = leer("entrevistas/inmobiliarias.csv")
+I = leer("inmobiliarias.csv")
 if I is None:
     print("inmobiliarias.csv está vacío: aún no hay respuestas.")
 else:
@@ -78,7 +78,7 @@ else:
     # resumen numérico
     num = ["precio_cierre_zonas_caras_usd", "precio_cierre_zonas_baratas_usd", "rebaja_pct", "meses_venta", "aumento_valor_pct"]
     resumen = I[num].apply(pd.to_numeric, errors="coerce").agg(["count", "mean", "median", "min", "max"]).round(1).T
-    resumen.to_csv("entrevistas/resumen_inmobiliarias.csv")
+    resumen.to_csv("resumen_inmobiliarias.csv")
     print(resumen)
 
     # motivos de venta (promedio)

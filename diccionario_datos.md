@@ -2,7 +2,7 @@
 
 Todos los precios están en USD. "Sí/No" son texto. Una columna con 0 en cuartos o baños significa **no indicado**, no "cero".
 
-## `limpios/inmuebles_habana_pro.csv` (92 filas, archivo principal)
+## `inmuebles_habana_pro.csv` (92 filas, archivo principal)
 | Columna | Descripción |
 |---|---|
 | Título | Título del anuncio |
@@ -24,7 +24,7 @@ Todos los precios están en USD. "Sí/No" son texto. Una columna con 0 en cuarto
 | Descripción | Texto del anuncio, con los teléfonos enmascarados como [tel] |
 | Enlace | URL del anuncio en Revolico |
 
-## `limpios/inmuebles_auditados.csv` (92 filas)
+## `inmuebles_auditados.csv` (92 filas)
 | Columna | Descripción |
 |---|---|
 | Título, Tipo_Inmueble, Zona_Limpia, Enlace | Igual que arriba |
@@ -38,29 +38,29 @@ Todos los precios están en USD. "Sí/No" son texto. Una columna con 0 en cuarto
 | flag_duplicado | Sí si es casi duplicado de otro anuncio (2) |
 | flag_sin_detalle | Sí si el anuncio no tiene descripción (12) |
 
-## `limpios/con_clusters.csv` (92 filas)
+## `con_clusters.csv` (92 filas)
 Las columnas de `inmuebles_habana_pro.csv` más: `Precio` (precio corregido), `N_extras` (cantidad de servicios y características), `log_precio`, `Cluster` (0 a 2) y `Segmento` (Poco detallado, Detallado o Lujo).
 
 ## Resúmenes
 | Archivo | Contenido |
 |---|---|
-| `limpios/perfil_clusters.csv` | Por segmento: anuncios, precio mediano, cuartos, baños y extras |
-| `limpios/triangulacion.csv` | n, cuartiles, mediana y promedio de las dos extracciones |
-| `limpios/auditoria_resumen.csv` | Indicadores de la auditoría (indicador, valor) |
-| `limpios/estadisticas.csv` | Comparaciones de precio entre grupos: n con y sin, medianas, p de Mann-Whitney, diferencia de medianas con intervalo bootstrap y si es concluyente |
-| `limpios/estadisticas_municipio.csv` | Por municipio: n, mediana y cuartiles |
-| `limpios/estadisticas_modelos.csv` | R² ajustado de cada modelo sobre el logaritmo del precio |
+| `perfil_clusters.csv` | Por segmento: anuncios, precio mediano, cuartos, baños y extras |
+| `triangulacion.csv` | n, cuartiles, mediana y promedio de las dos extracciones |
+| `auditoria_resumen.csv` | Indicadores de la auditoría (indicador, valor) |
+| `estadisticas.csv` | Comparaciones de precio entre grupos: n con y sin, medianas, p de Mann-Whitney, diferencia de medianas con intervalo bootstrap y si es concluyente |
+| `estadisticas_municipio.csv` | Por municipio: n, mediana y cuartiles |
+| `estadisticas_modelos.csv` | R² ajustado de cada modelo sobre el logaritmo del precio |
 
-## `crudos/`
+## Entrevistas
 | Archivo | Contenido |
 |---|---|
 | `revolico_completo.csv` | Extracción 1 tal como salió del scraping (teléfonos enmascarados) |
 | `revolico_casas.csv` | Extracción 2: solo título y precio, con otro proceso de filtrado |
 
-## `../entrevistas/`
+## Entrevistas
 | Archivo | Contenido |
 |---|---|
-| `personas.csv` | 35 filas (P01 a P35). `rol`; `p1_valora` a `p5_precios` con las letras del cuestionario (ver `entrevistas/cuestionarios.md`); varias letras en una celda significan varias opciones |
+| `personas.csv` | 35 filas (P01 a P35). `rol`; `p1_valora` a `p5_precios` con las letras del cuestionario (ver `cuestionarios.md`); varias letras en una celda significan varias opciones |
 | `inmobiliarias.csv` | 5 filas (INM1 a INM5). Zonas caras y baratas, precios de cierre en USD (punto medio cuando se dio un rango), rebaja en %, meses de venta, servicio más valorado, motivos y composición del catálogo en %, y notas |
 | `respuestas_cualitativas.csv` | 25 respuestas de texto libre: `codigo`, `tipo` (persona o inmobiliaria), `tema`, `respuesta` |
 

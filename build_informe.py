@@ -9,13 +9,13 @@ from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph,
 from reportlab.lib.utils import ImageReader
 
 F = ""
-aud = pd.read_csv(F + "datos/limpios/inmuebles_auditados.csv")
-res = pd.read_csv(F + "datos/limpios/auditoria_resumen.csv").set_index("indicador")["valor"]
-perfil = pd.read_csv(F + "datos/limpios/perfil_clusters.csv")
-tri = pd.read_csv(F + "datos/limpios/triangulacion.csv")
-cl = pd.read_csv(F + "datos/limpios/con_clusters.csv")
-P = pd.read_csv("entrevistas/personas.csv")
-INM = pd.read_csv("entrevistas/inmobiliarias.csv")
+aud = pd.read_csv(F + "inmuebles_auditados.csv")
+res = pd.read_csv(F + "auditoria_resumen.csv").set_index("indicador")["valor"]
+perfil = pd.read_csv(F + "perfil_clusters.csv")
+tri = pd.read_csv(F + "triangulacion.csv")
+cl = pd.read_csv(F + "con_clusters.csv")
+P = pd.read_csv("personas.csv")
+INM = pd.read_csv("inmobiliarias.csv")
 def cnt(col, letra):
     r = P[col].dropna().astype(str); r = r[r != ""]
     return int(r.str.contains(letra).sum()), len(r)
@@ -68,6 +68,25 @@ def TAB(filas, anchos, titulo):
                            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e8eef8"))]))
     historia.append(Paragraph(f"<b>Tabla {ntab[0]}.</b> {titulo}", ParagraphStyle("tt", parent=cuerpo, fontSize=9, alignment=0, spaceAfter=3, keepWithNext=1)))
     historia.append(t); sp(10)
+import re as _re
+md = []
+def _m(t):
+    t = _re.sub(r"<b>(.*?)</b>", r"**\1**", t); t = _re.sub(r"<i>(.*?)</i>", r"*\1*", t)
+    t = t.replace("<br/>", " ").replace("&quot;", '"').replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+    return _re.sub(r"<[^>]+>", "", t)
+_H1, _H2, _Pp, _B, _NOTA, _FIG, _TAB = H1, H2, Pp, B, NOTA, FIG, TAB
+def H1(t): md.append("\n# " + _m(t) + "\n"); _H1(t)
+def H2(t): md.append("\n## " + _m(t) + "\n"); _H2(t)
+def Pp(t): md.append(_m(t) + "\n"); _Pp(t)
+def B(t): md.append("- " + _m(t)); _B(t)
+def NOTA(t): md.append("> " + _m(t) + "\n"); _NOTA(t)
+def FIG(a, tx, an=14.5): md.append(f"\n![Figura {nfig[0] + 1}. {tx}]({a})\n\n*Figura {nfig[0] + 1}. {tx}*\n"); _FIG(a, tx, an)
+def TAB(f, an, ti):
+    cab = "| " + " | ".join(_m(str(c)).replace("|", "/") for c in f[0]) + " |"
+    cuerpo_md = "\n".join("| " + " | ".join(_m(str(c)).replace("|", "/").replace("\n", " ") for c in r) + " |" for r in f[1:])
+    md.append(f"\n**Tabla {ntab[0] + 1}.** {_m(ti)}\n\n" + cab + "\n|" + "---|" * len(f[0]) + "\n" + cuerpo_md + "\n")
+    _TAB(f, an, ti)
+md.append("# Informe técnico: el mercado inmobiliario de venta de viviendas en La Habana\n\n**Autora:** Brianet Fagil Cuni. Universidad de La Habana, Facultad de Matemática y Computación, Ciencia de Datos (primer año). Noviembre de 2026.\n")
 f0 = lambda x: f"{x:,.0f}"
 
 # ===== portada =====
@@ -132,6 +151,13 @@ H2("2.4 Fuente institucional: Ley de la Vivienda 187/2026")
 Pp("<b>Contexto legal.</b> La Ley 187/2026, de la Vivienda, se publicó en la Gaceta Oficial nº 86 el 14 de octubre de 2026 y entra en vigor el 21 de octubre. Sustituye la ley de 1988. Reconoce a las personas naturales hasta dos viviendas en propiedad, además de una de descanso; exige que la compraventa se formalice ante notario; establece que el pago se haga mediante instrumentos bancarios y elimina la confiscación de la vivienda por salida del país (EFE, 14 de octubre de 2026). La compraventa entre particulares estuvo prohibida durante décadas y se autorizó en 2011. Este estudio se hizo en torno a la publicación de la ley: no mide sus efectos.")
 Pp("La extracción de anuncios es anterior a la publicación de la ley (el informe original lleva fecha del 10 de octubre). Algunas entrevistas son posteriores a ella.")
 
+H2("2.5 Evidencia, catálogos y privacidad")
+Pp("Se pidió el catálogo de viviendas a las cinco inmobiliarias. <b>Solo una lo compartió</b>: su enlace de Facebook (https://www.facebook.com/share/1BvYySV94j/) y las capturas de seis de sus anuncios están en <i>anuncios_fotografias.md</i> y en los archivos <i>casa_1_...</i> a <i>casa_6_...</i>. "
+   "Las otras cuatro prefirieron no compartirlo y se respetó su decisión, para mantener la privacidad de las inmobiliarias. Por eso las cifras de catálogo de las demás agencias son las que dijeron en la entrevista y no una verificación propia.")
+Pp("Muchas de las personas entrevistadas pidieron que no se publicara su nombre ni su número. Esos datos de contacto se conservan de forma privada y no están en el repositorio: solo hay códigos (P01 a P35 e INM1 a INM5) y los teléfonos de los anuncios aparecen enmascarados como [tel]. "
+   "Las conversaciones originales y las capturas se guardan fuera del repositorio. Las fotos no se usan en las estadísticas; ilustran la variedad de viviendas y lo que un anuncio no describe.")
+FIG("montaje_6_casas.jpg", "Seis viviendas de anuncios de una inmobiliaria en Facebook (evidencia visual; no entra en las estadísticas).", 12)
+
 # ===== 3 =====
 H1("3. Metodología")
 H2("3.1 Corrección de precios")
@@ -158,9 +184,41 @@ Pp("<b>Programación y análisis.</b> Python en <b>PyDroid 3</b> (y Termux para 
 Pp("<b>Recolección de datos.</b> Revolico (anuncios de venta), WhatsApp y entrevistas en persona (personas e inmobiliarias), Google Forms y Google Sheets (encuesta y registro de respuestas) y Facebook (evidencia fotográfica de anuncios de una inmobiliaria).")
 Pp("<b>Publicación y control de versiones.</b> GitHub como repositorio y control de versiones.")
 Pp("<b>Inteligencia artificial.</b> Se usaron asistentes de IA (entre ellos Claude) como apoyo para organizar el repositorio, escribir y revisar scripts, calcular las pruebas estadísticas, "
-   "redactar la historia y este informe, y buscar prensa sobre la Ley de la Vivienda. El prompt usado para diseñar la guía de entrevistas está en <i>entrevistas/prompt_diseno_guia.md</i> y el que sirve para analizar las respuestas, en <i>entrevistas/prompt_analisis_entrevistas.md</i>. "
+   "redactar la historia y este informe, y buscar prensa sobre la Ley de la Vivienda. El prompt usado para diseñar la guía de entrevistas está en <i>prompt_diseno_guia.md</i> y el que sirve para analizar las respuestas, en <i>prompt_analisis_entrevistas.md</i>. "
    "La definición del problema, la recolección de los anuncios, las entrevistas y la revisión de cada cifra son de la autora. Se descartó todo contenido propuesto por la IA que no coincidía con los datos reales.")
-Pp("<b>Control de calidad.</b> Catorce pruebas automáticas (<i>tests/test_datos.py</i>, con unittest) comprueban que hay 92 anuncios, que la mediana corregida es 25,000 USD, que los precios son válidos, que los códigos de las entrevistas son los esperados, que no hay teléfonos reales en los archivos y que la historia tiene 30 preguntas con todas sus imágenes.")
+Pp("<b>Control de calidad.</b> Catorce pruebas automáticas (<i>test_datos.py</i>, con unittest) comprueban que hay 92 anuncios, que la mediana corregida es 25,000 USD, que los precios son válidos, que los códigos de las entrevistas son los esperados, que no hay teléfonos reales en los archivos y que la historia tiene 30 preguntas con todas sus imágenes.")
+
+H2("3.7 Herramientas y aplicaciones utilizadas")
+TAB([["Herramienta", "Para qué se usó"],
+     ["Teléfono Android", "Único dispositivo de trabajo: programación, entrevistas, redacción y subida al repositorio. No se usó computadora"],
+     ["PyDroid 3", "Entorno de Python en el teléfono: scraping, limpieza, auditoría, estadística, clustering, gráficos y generación de PDF"],
+     ["Termux", "Terminal del teléfono: comandos y Git"],
+     ["pandas, NumPy, SciPy", "Manejo de datos, cálculo numérico y pruebas estadísticas (Mann-Whitney, Spearman, bootstrap)"],
+     ["matplotlib", "Gráficos"],
+     ["requests", "Descarga de páginas para el scraping"],
+     ["ReportLab", "Generación de los informes en PDF"],
+     ["Revolico", "Fuente de los anuncios de venta"],
+     ["WhatsApp y entrevistas en persona", "Contacto con las personas y las inmobiliarias"],
+     ["Google Forms y Google Sheets", "Encuesta a las personas y registro de respuestas"],
+     ["Facebook", "Evidencia fotográfica del catálogo de una inmobiliaria"],
+     ["GitHub", "Repositorio público y control de versiones"],
+     ["Asistentes de IA (entre ellos Claude)", "Apoyo para organizar el repositorio, escribir y revisar código, calcular estadísticas, redactar y buscar prensa sobre la Ley de la Vivienda. Todas las cifras se verificaron contra los datos"]],
+    [4.6, 11.8], "Herramientas, aplicaciones y asistentes de IA usados en el proyecto.")
+H2("3.8 Cronograma de trabajo (tres semanas)")
+Pp("El proyecto se hizo en tres semanas, entre el 16 de octubre y el 6 de noviembre de 2026. La tabla resume qué se hizo en cada tramo; el detalle y los aprendizajes están en <i>bitacora.md</i>.")
+TAB([["Semana", "Días", "Tareas", "Resultado"],
+     ["1 (16 al 22 de oct.)", "1 y 2", "Definir la pregunta y el alcance; elegir Revolico; decidir las variables", "Pregunta y plan"],
+     ["1", "3 a 5", "Escribir el scraper en PyDroid 3 y extraer los anuncios; enmascarar teléfonos", "92 anuncios (revolico_completo.csv)"],
+     ["1", "6 y 7", "Limpieza inicial y primeros gráficos", "inmuebles_habana_pro.csv, gráficos 1 a 6"],
+     ["2 (23 al 29 de oct.)", "1 y 2", "Auditar los precios contra el texto y corregir 16 errores de extracción", "inmuebles_auditados.csv, gráficos 11 y 12"],
+     ["2", "3", "Segunda extracción y comparación con la primera", "triangulacion.csv, gráfico 13"],
+     ["2", "4 y 5", "Clustering K-Means con el método del codo (k = 3)", "con_clusters.csv, gráficos 7 a 9"],
+     ["2", "6 y 7", "Diseñar los cuestionarios y empezar las entrevistas", "cuestionarios.md"],
+     ["3 (30 de oct. al 6 de nov.)", "1 y 2", "Terminar, codificar y anonimizar las entrevistas (35 personas y 5 inmobiliarias); pedir los catálogos", "personas.csv, inmobiliarias.csv"],
+     ["3", "3 y 4", "Estadística (Mann-Whitney, Spearman, bootstrap, regresión) y gráficos de comparación y de entrevistas", "estadisticas*.csv, gráficos 14 a 16"],
+     ["3", "5", "Contexto legal (prensa sobre la Ley 187/2026), fotos y fuentes", "fuentes.md, anuncios_fotografias.md"],
+     ["3", "6 y 7", "Historia con 30 preguntas, informe técnico, diccionario de datos, pruebas, README y guion", "historia, informe técnico, test_datos.py"]],
+    [3.3, 1.3, 7.4, 4.4], "Cronograma de las tres semanas de trabajo.")
 
 # ===== 4 =====
 H1("4. Resultados: anuncios de Revolico")
@@ -168,11 +226,11 @@ H2("4.1 Precios")
 Pp(f"La mediana es de ${f0(med)} USD y el promedio de ${f0(p.mean())}. Los anuncios van de ${f0(p.min())} a ${f0(p.max())}. La Figura 1 muestra por qué el promedio "
    f"no es fiable: al corregir los errores baja de ${f0(res.iloc[7])} a ${f0(res.iloc[8])}, mientras que la mediana casi no se mueve "
    f"(${f0(res.iloc[9])} sin corregir, ${f0(res.iloc[10])} corregida, ${f0(res.iloc[11])} sin duplicados).")
-FIG("graficos/grafico_12_sensibilidad.png", "La mediana es estable ante las correcciones; el promedio no.", 11.5)
+FIG("grafico_12_sensibilidad.png", "La mediana es estable ante las correcciones; el promedio no.", 11.5)
 H2("4.2 Precios por municipio")
 TAB([["Municipio", "Mediana (USD)", "Anuncios"]] + [[i, f0(r["median"]), int(r["count"])] for i, r in mun.iterrows()], [7, 4, 3],
     "Precio mediano por municipio de Revolico (municipios con 3 o más anuncios).")
-FIG("graficos/grafico_10_municipio.png", "Precio mediano por municipio.", 12.5)
+FIG("grafico_10_municipio.png", "Precio mediano por municipio.", 12.5)
 Pp("Los municipios más caros son Plaza de la Revolución (que incluye el Vedado), Habana del Este (que incluye Guanabo, zona de playa) y Playa. Diez de Octubre queda en un "
    "nivel intermedio y es heterogéneo. Centro Habana, Cerro y Arroyo Naranjo están entre los más baratos.")
 H2("4.3 Tipo de inmueble, servicios y características")
@@ -182,7 +240,7 @@ Pp(f"Los servicios más mencionados son el gas de la calle ({serv['Gas']:.0f}% d
    f"({serv['Luz']:.0f}%). Ningún anuncio menciona internet. Además, el {sin_cuartos:.0f}% de los anuncios no indica cuántos cuartos tiene, lo que limita cualquier análisis por tamaño.")
 H2("4.4 Auditoría de datos")
 TAB([["Indicador", "Valor"]] + [[k, f0(v)] for k, v in res.items()], [11, 3], "Resumen de la auditoría de calidad de los 92 anuncios.")
-FIG("graficos/grafico_11_auditoria.png", "Problemas de calidad detectados.", 9.5)
+FIG("grafico_11_auditoria.png", "Problemas de calidad detectados.", 9.5)
 Pp("La zona deducida del texto del anuncio no coincidió con el municipio de Revolico en 10 casos (por ejemplo, anuncios de Guanabo clasificados como Playa) y 13 anuncios quedaron "
    "sin zona. Por eso el análisis geográfico se basa en el municipio de la plataforma.")
 H2("4.5 Segmentación con K-Means")
@@ -190,7 +248,7 @@ filas = [["Segmento", "Anuncios", "Precio mediano (USD)", "Cuartos", "Baños", "
 for _, r in perfil.iterrows():
     filas.append([r["Segmento"], int(r["Anuncios"]), f0(r["Precio_mediano"]), f"{r['Cuartos']:.1f}", f"{r['Banos']:.1f}", f"{r['Extras']:.1f}"])
 TAB(filas, [3.6, 2.2, 3.8, 2.2, 2.2, 2.2], "Perfil de los tres segmentos (promedios por grupo).")
-FIG("graficos/grafico_8_clusters_scatter.png", "Segmentos de anuncios según servicios mencionados y precio (escala logarítmica).", 12)
+FIG("grafico_8_clusters_scatter.png", "Segmentos de anuncios según servicios mencionados y precio (escala logarítmica).", 12)
 Pp("Los grupos no representan tipos de mercado sino, sobre todo, el nivel de detalle del anuncio: el grupo &quot;Poco detallado&quot; casi no informa cuartos ni baños, mientras que "
    "&quot;Detallado&quot; sí lo hace. El tercero agrupa cinco casas de lujo (6 o más cuartos, mediana de 600,000 USD). Esto es un resultado útil por sí mismo: advierte que "
    "la calidad de la información del anuncio condiciona el análisis.")
@@ -203,7 +261,7 @@ Pp(f"La segunda extracción da una mediana de ${f0(tri.iloc[1]['mediana'])} USD,
    "(Figura 5 del anexo C); la diferencia puede deberse a la composición de anuncios, no a un error de medición.")
 
 H2("4.7 Pruebas estadísticas")
-est = pd.read_csv("datos/limpios/estadisticas.csv")
+est = pd.read_csv("estadisticas.csv")
 filas = [["Comparación (precio publicado)", "n con", "n sin", "Mediana con", "Mediana sin", "p (Mann-Whitney)"]]
 for _, r in est.iterrows():
     if str(r["comparacion"]).startswith("Spearman"): continue
@@ -215,9 +273,9 @@ Pp("Se hicieron unas 25 comparaciones; con ese número de pruebas se espera que 
    "El garaje y el agua parecen asociarse al precio, pero la mayoría de esos anuncios están en zonas caras (garaje) o en zonas baratas (agua), de modo que el efecto se confunde con la zona.")
 Pp("La correlación de Spearman entre el precio y los cuartos es 0.56 (39 anuncios que lo indican) y con los baños 0.61 (24 anuncios). Los anuncios que dicen cuartos y baños son los más detallados, así que no representan a todos.")
 Pp("Un modelo lineal sobre el logaritmo del precio, solo exploratorio, da un R² ajustado de 0.30 con una variable de zona cara, 0.08 con el tipo de vivienda, 0.01 con el número de servicios mencionados y 0.38 con zona y tipo juntos; añadir los servicios no lo mejora (0.37). "
-   "La variable de zona cara se definió después de ver los resultados, por lo que el 0.30 es optimista. Código: <i>codigo/estadisticas.py</i>.")
-FIG("graficos/grafico_14_cajas_municipio.png", "Dispersión del precio por municipio (municipios con 5 o más anuncios).", 12)
-FIG("graficos/grafico_16_oferta_vs_preferencia.png", "Tipo de vivienda ofertado en Revolico frente al preferido por las personas entrevistadas.", 11)
+   "La variable de zona cara se definió después de ver los resultados, por lo que el 0.30 es optimista. Código: <i>estadisticas.py</i>.")
+FIG("grafico_14_cajas_municipio.png", "Dispersión del precio por municipio (municipios con 5 o más anuncios).", 12)
+FIG("grafico_16_oferta_vs_preferencia.png", "Tipo de vivienda ofertado en Revolico frente al preferido por las personas entrevistadas.", 11)
 
 # ===== 5 =====
 H1("5. Resultados: entrevistas")
@@ -252,6 +310,31 @@ Pp("Otros datos: INM1 señala que una casa típica en La Habana se cierra entre 
    "Diez de Octubre y Cerro. INM3 indica un precio promedio de 40,000 a 180,000 USD según el cliente. El catálogo de INM2 tiene 230 viviendas: 150 casas (65%) y 80 apartamentos (35%). "
    "INM1 y INM3 coinciden en que la mayoría compra para vivir o para alquilar según el caso, y INM1 añade que la inversión para alquilar se ve poco por límites legales y por la caída del turismo. "
    "INM1 cita como problemas documentales frecuentes los títulos desactualizados, las herencias sin declaratoria de herederos y las casas no inscritas en el Registro de la Propiedad.")
+
+H2("5.3 Las entrevistas en forma de tabla")
+Pp("Las dos tablas siguientes reúnen todas las respuestas, ya decodificadas. Las respuestas están anonimizadas con códigos; los datos de contacto de las personas no se publican.")
+_mp = {"p1_valora": {"A": "Ubicación", "B": "Precio", "C": "Servicios", "D": "Espacio", "T": "Todas"},
+       "p2_zona_cara": {"A": "Playa", "B": "Vedado", "C": "Centro Habana", "D": "Otra"},
+       "p3_tipo": {"A": "Casa", "B": "Apartamento", "C": "Biplanta"},
+       "p4_servicio": {"A": "Agua", "B": "Luz", "C": "Gas", "D": "Internet", "T": "Todos"},
+       "p5_precios": {"A": "Subiendo", "B": "Bajando", "C": "Estables"}}
+def _dec(col, v):
+    if pd.isna(v) or str(v).strip() == "": return "-"
+    return ", ".join(_mp[col].get(c, c) for c in str(v).strip())
+def _nz(v):
+    if pd.isna(v): return "-"
+    try: return f"{float(v):,.0f}"
+    except Exception: return str(v)
+_f = [["Código", "Zonas caras", "Zonas baratas", "Cierre caras (USD)", "Cierre baratas (USD)", "Rebaja %", "Meses venta", "Servicio valorado"]]
+for _, r in INM.iterrows():
+    zc = ", ".join(str(r[c]) for c in ["zona_cara_1", "zona_cara_2", "zona_cara_3"] if pd.notna(r[c])) or "-"
+    zb = ", ".join(str(r[c]) for c in ["zona_barata_1", "zona_barata_2", "zona_barata_3"] if pd.notna(r[c])) or "-"
+    _f.append([r["codigo"], zc, zb, _nz(r["precio_cierre_zonas_caras_usd"]), _nz(r["precio_cierre_zonas_baratas_usd"]), _nz(r["rebaja_pct"]), _nz(r["meses_venta"]), r["servicio_mas_valorado"] if pd.notna(r["servicio_mas_valorado"]) else "-"])
+TAB(_f, [1.3, 3.6, 3.6, 1.8, 1.8, 1.3, 1.3, 2.0], "Inmobiliarias y gestoras: respuestas con cifras (el texto libre de cada una está en el catálogo).")
+_g = [["Código", "Rol", "Qué valora más", "Zona más cara", "Tipo preferido", "Servicio indispensable", "Precios"]]
+for _, r in P.iterrows():
+    _g.append([r["codigo"], r["rol"] if pd.notna(r["rol"]) else "-", _dec("p1_valora", r["p1_valora"]), _dec("p2_zona_cara", r["p2_zona_cara"]), _dec("p3_tipo", r["p3_tipo"]), _dec("p4_servicio", r["p4_servicio"]), _dec("p5_precios", r["p5_precios"])])
+TAB(_g, [1.3, 1.8, 3.0, 2.7, 2.6, 3.0, 2.0], "Las 35 personas entrevistadas: una fila por persona.")
 
 # ===== 6 =====
 H1("6. Discusión")
@@ -308,11 +391,11 @@ Pp("1. Zonas más caras y más económicas y precio promedio real de cierre. 2. 
    "4. Servicio básico más valorado y aumento aproximado del valor. 5. Motivo de venta: emigración, necesidad de dinero o mudanza (porcentajes). "
    "6. Composición del catálogo: casas, apartamentos y otros (porcentajes).")
 H1("Anexo B. Estructura del repositorio")
-Pp("El repositorio contiene los datos crudos y limpios (<i>datos_*</i>), los gráficos (<i>graficos/grafico_*</i>), los scripts de scraping, limpieza, clustering, auditoría y generación del informe "
-   "(<i>codigo/</i>), un cuaderno con el proceso completo (<i>notebook/notebook_analisis.ipynb</i>), el diccionario de datos (<i>datos/diccionario_datos.md</i>), las pruebas automáticas (<i>tests/</i>), la evidencia (<i>evidencia/</i>, con fuentes y fotos de anuncios), el informe en HTML y las entrevistas anonimizadas con su catálogo y cuestionarios (<i>entrevistas/</i>). "
+Pp("El repositorio contiene los datos crudos y limpios (<i>datos_*</i>), los gráficos (<i>grafico_*</i>), los scripts de scraping, limpieza, clustering, auditoría y generación del informe "
+   "(<i></i>), un cuaderno con el proceso completo (<i>notebook_analisis.ipynb</i>), el diccionario de datos (<i>diccionario_datos.md</i>), las pruebas automáticas (<i></i>), la evidencia (<i></i>, con fuentes y fotos de anuncios), el informe en HTML y las entrevistas anonimizadas con su catálogo y cuestionarios (<i></i>). "
    "El README explica el orden para reproducir los resultados.")
 H1("Anexo C. Figura complementaria")
-FIG("graficos/grafico_13_triangulacion.png", "Distribución de precios en las dos extracciones de Revolico (escala logarítmica).", 12)
+FIG("grafico_13_triangulacion.png", "Distribución de precios en las dos extracciones de Revolico (escala logarítmica).", 12)
 H1("Anexo E. Fuentes consultadas")
 Pp("EFE, &quot;Cuba publica nueva Ley de Vivienda que permite tener hasta dos inmuebles en propiedad&quot;, 14 de octubre de 2026 (Infobae, Swissinfo y Diario Libre).")
 Pp("Escambray, &quot;Cuba publica una nueva Ley de la Vivienda: ¿qué cambia?&quot;, octubre de 2026.")
@@ -325,17 +408,17 @@ historia.append(PageBreak())
 H1("Anexo D. Procedimiento paso a paso")
 Pp("El proceso se hizo en el orden siguiente. Cada paso indica el código que lo ejecuta y los archivos que produce, para que se pueda revisar y reproducir.")
 pasos = [
- ("1. Recolección de anuncios.", "Se extrajeron 92 anuncios de venta de Revolico con <i>codigo/scraping_revolico.py</i>. Resultado: <i>datos/crudos/revolico_completo.csv</i>. Los teléfonos se enmascararon como [tel] antes de publicar."),
- ("2. Segunda extracción.", "Una extracción de solo título y precio (<i>datos/crudos/revolico_casas.csv</i>). Se excluyeron ofertas de compra, alquileres, gestores y precios menores de 1,000 USD, y quedaron 78 anuncios."),
- ("3. Corrección de precios.", "El precio numérico original tenía errores. Se leyó el precio escrito en el texto de cada anuncio. Resultado: 16 precios corregidos (<i>datos/limpios/inmuebles_auditados.csv</i>)."),
- ("4. Auditoría de calidad.", "Se revisaron la zona frente al municipio de Revolico, los anuncios sin descripción, los casi duplicados y las zonas sin asignar. Código: <i>codigo/auditoria.py</i>. Resumen: <i>datos/limpios/auditoria_resumen.csv</i>."),
- ("5. Estadística descriptiva.", "Se calcularon medianas, cuartiles y promedios por municipio y tipo de inmueble. Gráficos 1 a 6 con <i>codigo/graficos.py</i>. La sensibilidad de la mediana y el promedio está en el gráfico 12. Las pruebas estadísticas (Mann-Whitney, Spearman, regresión sobre el logaritmo del precio) están en <i>codigo/estadisticas.py</i> y sus resultados en <i>datos/limpios/estadisticas.csv</i>."),
- ("6. Clustering.", "K-Means implementado con NumPy, con cuatro variables estandarizadas. El método del codo sugirió k = 3, con 20 inicializaciones. Código: <i>codigo/clustering.py</i>. Resultados: <i>datos/limpios/con_clusters.csv</i> y <i>perfil_clusters.csv</i>."),
- ("7. Entrevistas a personas.", "Cuestionario de 5 preguntas, codificado con letras. Se cargaron con <i>codigo/entrevistas_cargar_respuesta.py</i> en <i>entrevistas/personas.csv</i> (35 personas). El análisis, con <i>codigo/entrevistas_analisis.py</i>, produce los gráficos de <i>graficos/entrevistas/</i>."),
- ("8. Entrevistas a inmobiliarias y gestoras.", "Datos numéricos en <i>entrevistas/inmobiliarias.csv</i>, respuestas de texto libre en <i>entrevistas/respuestas_cualitativas.csv</i>. Cuando una respuesta era un rango, se usó el punto medio y se anotó en la columna de notas."),
- ("9. Triangulación.", "Comparación entre las dos extracciones (<i>datos/limpios/triangulacion.csv</i>, gráfico 13). Las dos muestras no son independientes."),
- ("10. Integración.", "Se contrastaron los anuncios, las personas y las inmobiliarias. Los hallazgos están en la historia (<i>historia/historia.md</i>)."),
- ("11. Informes.", "<i>codigo/generar_informe.py</i> produce <i>informe/informe_inmobiliario.html</i>. <i>codigo/informe_pdf/build_informe.py</i> produce este informe, y <i>build_historia.py</i> produce la historia en PDF."),
+ ("1. Recolección de anuncios.", "Se extrajeron 92 anuncios de venta de Revolico con <i>scraping_revolico.py</i>. Resultado: <i>revolico_completo.csv</i>. Los teléfonos se enmascararon como [tel] antes de publicar."),
+ ("2. Segunda extracción.", "Una extracción de solo título y precio (<i>revolico_casas.csv</i>). Se excluyeron ofertas de compra, alquileres, gestores y precios menores de 1,000 USD, y quedaron 78 anuncios."),
+ ("3. Corrección de precios.", "El precio numérico original tenía errores. Se leyó el precio escrito en el texto de cada anuncio. Resultado: 16 precios corregidos (<i>inmuebles_auditados.csv</i>)."),
+ ("4. Auditoría de calidad.", "Se revisaron la zona frente al municipio de Revolico, los anuncios sin descripción, los casi duplicados y las zonas sin asignar. Código: <i>auditoria.py</i>. Resumen: <i>auditoria_resumen.csv</i>."),
+ ("5. Estadística descriptiva.", "Se calcularon medianas, cuartiles y promedios por municipio y tipo de inmueble. Gráficos 1 a 6 con <i>graficos.py</i>. La sensibilidad de la mediana y el promedio está en el gráfico 12. Las pruebas estadísticas (Mann-Whitney, Spearman, regresión sobre el logaritmo del precio) están en <i>estadisticas.py</i> y sus resultados en <i>estadisticas.csv</i>."),
+ ("6. Clustering.", "K-Means implementado con NumPy, con cuatro variables estandarizadas. El método del codo sugirió k = 3, con 20 inicializaciones. Código: <i>clustering.py</i>. Resultados: <i>con_clusters.csv</i> y <i>perfil_clusters.csv</i>."),
+ ("7. Entrevistas a personas.", "Cuestionario de 5 preguntas, codificado con letras. Se cargaron con <i>entrevistas_cargar_respuesta.py</i> en <i>personas.csv</i> (35 personas). El análisis, con <i>entrevistas_analisis.py</i>, produce los gráficos de <i></i>."),
+ ("8. Entrevistas a inmobiliarias y gestoras.", "Datos numéricos en <i>inmobiliarias.csv</i>, respuestas de texto libre en <i>respuestas_cualitativas.csv</i>. Cuando una respuesta era un rango, se usó el punto medio y se anotó en la columna de notas."),
+ ("9. Triangulación.", "Comparación entre las dos extracciones (<i>triangulacion.csv</i>, gráfico 13). Las dos muestras no son independientes."),
+ ("10. Integración.", "Se contrastaron los anuncios, las personas y las inmobiliarias. Los hallazgos están en la historia (<i>historia.md</i>)."),
+ ("11. Informes.", "<i>generar_informe.py</i> produce <i>informe_inmobiliario.html</i>. <i>build_informe.py</i> produce este informe, y <i>build_historia.py</i> produce la historia en PDF."),
  ("12. Verificación.", "Se comprobó que no hay teléfonos en los archivos publicados, que cada cifra del texto sale de un archivo de datos, y que los scripts se ejecutan desde la raíz del repositorio en el orden indicado en el README."),
 ]
 for titulo, cuerpo_txt in pasos:
@@ -346,7 +429,8 @@ def pie(canvas, doc):
     canvas.drawString(2.2 * cm, 1.3 * cm, "Informe técnico - Mercado inmobiliario de venta de viviendas en La Habana")
     canvas.drawRightString(A4[0] - 2.2 * cm, 1.3 * cm, f"Página {doc.page}")
     canvas.restoreState()
-doc = BaseDocTemplate("informe/informe_tecnico.pdf", pagesize=A4, leftMargin=2.2 * cm, rightMargin=2.2 * cm, topMargin=2.2 * cm, bottomMargin=2.2 * cm,
+doc = BaseDocTemplate("informe_tecnico.pdf", pagesize=A4, leftMargin=2.2 * cm, rightMargin=2.2 * cm, topMargin=2.2 * cm, bottomMargin=2.2 * cm,
                       title="Informe técnico: mercado inmobiliario en La Habana", author="Brianet Fagil Cuni")
 doc.addPageTemplates([PageTemplate(id="p", frames=[Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="m")], onPage=pie)])
 doc.build(historia); print("PDF creado")
+open("informe_tecnico.md", "w", encoding="utf-8").write("\n".join(md)); print("MD creado")

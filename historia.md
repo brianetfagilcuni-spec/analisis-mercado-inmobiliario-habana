@@ -2,17 +2,17 @@
 
 *Una historia contada con datos: 92 anuncios de Revolico, 5 inmobiliarias y 35 personas que dieron su opinión.*
 
-## Antes de empezar: la pregunta que todos se hacen
-Casi todo el mundo tiene una opinión sobre cuánto vale una casa. Que si en Playa está carísimo, que si en Centro Habana se consigue algo "razonable", que si todo depende de si el agua llega o no llega. Se dice en las colas, en los grupos de WhatsApp, en las reuniones de familia. Pero casi nadie puede decir **de dónde** sale esa idea.
+## Antes de empezar: la pregunta que no tenía respuesta
+Hay preguntas que parecen sencillas hasta que intentas responderlas. ¿Cuánto cuesta una casa en La Habana? Todo el mundo tiene una cifra en la cabeza, y casi todos la defienden con seguridad. Que si en Playa está carísimo, que si en Centro Habana se consigue algo razonable, que si todo depende de si el agua llega o no llega. Pero cuando fui a buscar de dónde salía esa seguridad, me encontré con un vacío: no había una tabla que reuniera los precios, ni una estadística a mano, solo anuncios sueltos, mensajes y opiniones.
 
-Este trabajo nace de esa duda. Si todos miramos los anuncios para saber cuánto cuesta una vivienda, ¿qué tanto podemos fiarnos de ellos? ¿Y qué es lo que hace, de verdad, que una casa cueste el doble o la mitad que otra?
+Y un anuncio es una historia contada a medias. Alguien decide qué enseñar (la terraza, el gas, el garaje) y qué callar (el estado de la cocina, el motivo de la venta, el trámite pendiente). Me pregunté qué pasaría si juntaba muchas de esas historias y las miraba con lupa: cuánto piden de verdad, qué dicen las inmobiliarias que las conocen por dentro y qué piensa la gente que busca casa.
 
-Para averiguarlo recogí los anuncios de venta de Revolico, les pregunté a cinco inmobiliarias cómo trabajan y entrevisté a 35 personas. Lo hice para la asignatura Introducción a la Ciencia de Datos, íntegramente desde un teléfono Android, con Python en PyDroid 3 y con la ayuda de una inteligencia artificial para organizar, programar y redactar (los datos, las entrevistas y la revisión de cada cifra son míos). Spoiler: los datos me desmintieron antes de darme la razón.
+Esa fue mi motivación, y era doble. Quería responder una pregunta que le importa a mucha gente. Y quería aprender a trabajar con datos reales, que llegan desordenados, pequeños y a veces equivocados, que es como llegan casi siempre. Lo hice para la asignatura Introducción a la Ciencia de Datos, íntegramente desde un teléfono Android, con Python en PyDroid 3 y con la ayuda de inteligencia artificial para organizar, programar y redactar (los datos, las entrevistas y la revisión de cada cifra son míos). Un aviso antes de seguir: los datos me desmintieron antes de darme la razón.
 
 ## Para quién es esta historia
 - **Para quien piensa comprar o vender.** No es una tasación ni sustituye a un especialista, pero te dice qué mirar, qué ignorar y por qué un anuncio no cuenta toda la historia.
 - **Para el profesor y el tribunal.** Aquí está el recorrido completo: cómo se recogieron los datos, cómo se corrigieron, qué se pudo concluir y qué no.
-- **Para los compañeros de la carrera.** Es un ejemplo de lo que pasa cuando los datos reales son pequeños, desordenados y a veces equivocados.
+- **Para quienes estudian datos.** Es un ejemplo de lo que pasa cuando los datos reales son pequeños, desordenados y a veces equivocados.
 
 ## Cómo leer esta historia
 La pregunta principal se descompone en **30 preguntas**, repartidas en seis capítulos. Cada una tiene una respuesta corta, el dato que la sostiene, un gráfico cuando lo hay y una nota sobre qué tan firme es. Tres reglas del juego:
@@ -36,7 +36,7 @@ La pregunta principal se descompone en **30 preguntas**, repartidas en seis cap�
 - **92 anuncios de venta de Revolico**, extraídos con un programa en Python y revisados uno por uno. Una segunda extracción de 78 anuncios sirvió de contraste.
 - **35 personas** entrevistadas, en persona y por WhatsApp, con un cuestionario de 5 preguntas.
 - **5 inmobiliarias o gestoras**, con entrevistas parciales y distintas entre sí.
-- **Evidencia fotográfica:** capturas de anuncios de una inmobiliaria en Facebook. Ilustran la variedad de viviendas, pero no entran en las estadísticas.
+- **Evidencia fotográfica:** de las cinco inmobiliarias, solo una compartió su catálogo; sus anuncios de Facebook ilustran la variedad de viviendas, pero no entran en las estadísticas. Las otras cuatro prefirieron no compartirlo, y muchas personas pidieron que no se publicara su nombre ni su número: se respetó para proteger su privacidad.
 - **Contexto legal:** la Ley 187/2026 de la Vivienda se publicó el 14 de octubre de 2026 y entró en vigor el 21. Según la prensa, reconoce hasta dos viviendas en propiedad (más una de descanso), exige notario, dispone que el pago no sea en efectivo y elimina la confiscación por salida del país. Este trabajo no mide sus efectos. Solo he leído la prensa, no el texto oficial de la Gaceta.
 
 ---
@@ -48,7 +48,7 @@ Lo primero que hice fue sumar los 92 anuncios. El precio promedio salió en casi
 **1. ¿Cuántos anuncios hay y cuál es el precio típico?**
 Hay 92 anuncios y la mediana es de **25,000 USD**. La mitad central va de 12,000 a 61,250 USD, y el intervalo de confianza al 95% de la mediana (por bootstrap) va de 18,000 a 37,525 USD. En otras palabras, "lo típico" no es una cifra: es un rango.
 
-![Reparto de los anuncios por rango de precio](../graficos/grafico_2_categoria_precio.png)
+![Reparto de los anuncios por rango de precio](grafico_2_categoria_precio.png)
 
 **2. ¿Por qué el promedio (66,298 USD) es 2.65 veces la mediana?**
 Porque siete anuncios superan los 150,000 USD y llegan a 750,000. Esos pocos precios altísimos arrastran el promedio, pero no la mediana. La realidad es más modesta: 38 anuncios (41%) cuestan menos de 20,000 USD, 26 (28%) entre 20,000 y 50,000, 21 (23%) entre 50,000 y 150,000 y solo 7 (8%) más de 150,000.
@@ -56,16 +56,16 @@ Porque siete anuncios superan los 150,000 USD y llegan a 750,000. Esos pocos pre
 **3. ¿Cuántos precios estaban mal, y qué pasó al corregirlos?**
 16 de 92 (17%). El programa había pegado dígitos de más: un apartamento del Vedado aparecía en 560,000 USD cuando el anuncio decía 60,000. El promedio original era de 159,776 USD; ya corregido, 66,298. La mediana casi no se movió (de 29,500 a 25,000), y esa estabilidad es la razón por la que la elijo como cifra de referencia.
 
-![Mediana y promedio antes y después de corregir](../graficos/grafico_12_sensibilidad.png)
+![Mediana y promedio antes y después de corregir](grafico_12_sensibilidad.png)
 
 **4. ¿Qué otros problemas tienen los datos, y se repite el resultado en otra extracción?**
 Hubo 13 anuncios sin zona asignada, 12 sin descripción, 10 con una zona distinta al municipio que da Revolico, 4 con más de un precio en el texto y 2 casi duplicados. Ninguno cambia la cifra central: sin los duplicados, la mediana sigue en 25,000 USD.
 
-![Problemas de calidad detectados](../graficos/grafico_11_auditoria.png)
+![Problemas de calidad detectados](grafico_11_auditoria.png)
 
 Una segunda extracción de 78 anuncios (solo título y precio, sin la misma revisión) da una mediana de 32,500 USD: la misma escala, con una diferencia de 30%. No son muestras independientes, así que sirve de contraste y no de confirmación.
 
-![Dos extracciones de Revolico](../graficos/grafico_13_triangulacion.png)
+![Dos extracciones de Revolico](grafico_13_triangulacion.png)
 
 **5. ¿Qué tan fiable es entonces la muestra?**
 Fiable para ubicar niveles de precio y frágil para casi todo lo demás: una sola extracción de 92 anuncios, precios de oferta, varios municipios con 5 anuncios o menos y una parte de anuncios poco detallados. Todo lo que sigue se lee con esa cautela puesta.
@@ -79,12 +79,14 @@ Si el precio de una casa depende de algo, lo primero que se espera es la ubicaci
 **6. ¿Cuáles son las zonas más caras?**
 Por municipio: **Plaza de la Revolución** (mediana 60,000 USD, 19 anuncios), **Habana del Este**, que incluye Guanabo (57,500, 6 anuncios) y **Playa** (52,500, 20 anuncios). Si se mira la zona escrita en el anuncio, el **Vedado** encabeza con 80,000 USD (14 anuncios); el Vedado forma parte del municipio Plaza de la Revolución.
 
-![Precio mediano por municipio](../graficos/grafico_10_municipio.png)
+![Precio mediano por municipio](grafico_10_municipio.png)
 
-![Precio mediano por zona escrita en el anuncio](../graficos/grafico_1_precio_por_zona.png)
+![Precio mediano por zona escrita en el anuncio](grafico_1_precio_por_zona.png)
 
 **7. ¿Y las más baratas?**
 Arroyo Naranjo (11,500 USD, 5 anuncios), Centro Habana (13,500, 8) y Cerro (13,750, 6). Marianao, La Lisa, Cotorro y otros tienen 1 o 2 anuncios, así que no concluyo nada sobre ellos. Dos inmobiliarias coinciden en que las zonas más económicas son Centro Habana, Diez de Octubre, Cerro, San Miguel del Padrón, Cotorro y Regla.
+
+![Zonas más económicas según las inmobiliarias](inmob_zonas_baratas.png)
 
 **8. ¿Dónde se concentra la oferta?**
 Playa y Diez de Octubre tienen 20 anuncios cada uno y Plaza de la Revolución 19: suman 59 de 92 (64%). La oferta se agolpa donde más gente quiere vivir.
@@ -98,7 +100,7 @@ No siempre, y aquí viene la sorpresa. Arroyo Naranjo es barato (11,500), pero H
 **11. ¿Dentro de un mismo municipio los precios son parecidos?**
 Para nada. En Playa la mitad central va de 24,500 a 80,000 USD y en Plaza de 27,500 a 80,000. El barrio dice mucho, pero no alcanza para tasar una casa concreta.
 
-![Dispersión del precio por municipio](../graficos/grafico_14_cajas_municipio.png)
+![Dispersión del precio por municipio](grafico_14_cajas_municipio.png)
 
 > **Lo que nos llevamos:** el barrio es el mejor predictor del precio, pero dentro de cada barrio hay de todo.
 
@@ -109,7 +111,7 @@ Una vez fijado el barrio, queda la casa en sí: su tipo, su tamaño, sus extras.
 **12. ¿Casa o apartamento: cuál cuesta más?**
 La casa independiente tiene una mediana de 27,000 USD (38 anuncios), el apartamento 17,500 (46) y la biplanta 47,500 (solo 6). La diferencia entre casa y el resto apenas cruza el umbral estadístico (p = 0.04) y su intervalo incluye el cero: es evidencia débil, y mezclada con la zona.
 
-![Anuncios por tipo de vivienda](../graficos/grafico_3_tipo_inmueble.png)
+![Anuncios por tipo de vivienda](grafico_3_tipo_inmueble.png)
 
 **13. ¿Pesan más las habitaciones o los baños?**
 No se puede decir. Solo 39 anuncios indican cuántos cuartos tienen y 24 cuántos baños. En esos anuncios, ambos se asocian con un precio mayor (correlación de Spearman 0.56 con cuartos y 0.61 con baños). Pero los anuncios que dan esos datos son los más detallados, y no representan a todos.
@@ -117,12 +119,12 @@ No se puede decir. Solo 39 anuncios indican cuántos cuartos tienen y 24 cuánto
 **14. ¿Cuánto suman el patio, la terraza o el balcón?**
 Nada que se pueda afirmar. Patio (15 anuncios): 17,000 frente a 25,000 USD, p = 0.21. Terraza (21): 45,000 frente a 25,000, p = 0.29. Balcón (13): 25,000 en ambos casos. Jardín (6) y piscina (3) tienen demasiado pocos anuncios.
 
-![Características más mencionadas en los anuncios](../graficos/grafico_5_caracteristicas.png)
+![Características más mencionadas en los anuncios](grafico_5_caracteristicas.png)
 
 **15. ¿El estado de la vivienda se refleja en el precio?**
 No puedo responderlo. Solo 5 anuncios dicen "remodelada" y ninguno habla de reparar o de mal estado. Los vendedores no describen el estado de forma sistemática, y ese silencio ya es un hallazgo sobre lo que un anuncio calla. Las fotos de los anuncios sí lo muestran: del patio con jardín y la cocina nueva a las paredes envejecidas y los locales sin terminar. Ese contraste es justo lo que el texto no dice.
 
-![Seis viviendas de anuncios de una inmobiliaria en Facebook](../evidencia/fotos_anuncios/montaje_6_casas.jpg)
+![Seis viviendas de anuncios de una inmobiliaria en Facebook](montaje_6_casas.jpg)
 
 > **Lo que nos llevamos:** el tipo de vivienda importa algo, pero los anuncios no dan datos suficientes para medir cuartos, extras o estado.
 
@@ -133,7 +135,7 @@ Aquí está la tensión central de la historia. Las personas entrevistadas insis
 **16. ¿Qué servicios mencionan los anuncios?**
 El gas en 28% de los anuncios, el teléfono en 25%, el agua en 21%, el garaje en 20%, el patio en 16% y la luz en 15%. **Internet no aparece en ninguno.**
 
-![Anuncios que mencionan cada servicio](../graficos/grafico_4_servicios.png)
+![Anuncios que mencionan cada servicio](grafico_4_servicios.png)
 
 **17. ¿Gas, agua y luz suben el precio?**
 En los datos, no. El gas (26 anuncios, p = 0.16) y la luz (14, p = 0.81) no marcan diferencia. El agua incluso aparece asociada a precios más bajos (14,000 frente a 25,000 USD, p = 0.04), pero 13 de los 19 anuncios que la mencionan están fuera de las zonas caras: es un efecto de la zona. Y el anuncio no dice si el agua llega todos los días, que es justo lo que las personas valoran.
@@ -141,7 +143,7 @@ En los datos, no. El gas (26 anuncios, p = 0.16) y la luz (14, p = 0.81) no marc
 **18. ¿El garaje es decisivo?**
 Con garaje la mediana es 52,500 USD y sin garaje 24,500 (p = 0.007), pero 12 de los 18 anuncios con garaje están en zonas caras. Dentro de esas zonas la diferencia es pequeña (60,000 frente a 55,000). Fuera de ellas solo hay 6 anuncios con garaje, aunque van en la dirección esperada (35,000 frente a 12,000). Está asociado a precios altos, pero no puedo separarlo de la zona.
 
-![Precio mediano con y sin cada característica](../graficos/grafico_15_servicios_precio.png)
+![Precio mediano con y sin cada característica](grafico_15_servicios_precio.png)
 
 **19. ¿Importan la placa libre, el teléfono, el amoblado o la energía solar?**
 No se nota diferencia. Placa libre (16 anuncios): 25,000 en ambos grupos. Teléfono (23): p = 0.09. Amoblado (9): 16,000 frente a 25,000, p = 0.71. Solo un anuncio de 92 menciona algo relacionado con energía solar o respaldo (panel, inversor, planta o batería), así que no se puede estimar su efecto.
@@ -151,7 +153,11 @@ La zona, por mucho. En un modelo exploratorio sobre el logaritmo del precio, una
 
 También probé con clustering (K-Means con k = 3) sobre precio, cuartos, baños y servicios, esperando encontrar "tipos de mercado". No los encontré: separó 57 anuncios poco detallados, 30 detallados y 5 de lujo. Los grupos reflejan cuánta información da el anuncio, no tipos de vivienda; por eso no lo uso como explicación.
 
-![Segmentos del clustering](../graficos/grafico_8_clusters_scatter.png)
+![Método del codo para elegir el número de segmentos](grafico_7_codo.png)
+
+![Segmentos del clustering](grafico_8_clusters_scatter.png)
+
+![Precio mediano por segmento](grafico_9_precio_por_segmento.png)
 
 > **Lo que nos llevamos:** los servicios que más importan a la gente son justo los que los anuncios no miden.
 
@@ -180,7 +186,7 @@ Llegó el momento de cruzar las tres fuentes: lo que dicen los anuncios, lo que 
 **25. ¿Cuánto baja el precio al cerrar, y coinciden los anuncios con lo que dicen las inmobiliarias?**
 Dos inmobiliarias coinciden en una rebaja de alrededor de 10% (una dice entre 5% y 15%). Para un anuncio de 25,000 USD, el cierre rondaría los 22,500. Es una estimación de las agencias, no una medición: no tengo precios de cierre. Una de ellas dio cifras de cierre por zona: 50,000 a 70,000 USD en Playa y Plaza, y 15,000 a 20,000 en Centro Habana, Diez de Octubre y Cerro. Los anuncios de Playa (52,500) y Plaza (60,000) caen dentro del rango; Centro Habana (13,500) y Cerro (13,750) quedan algo por debajo, y Diez de Octubre (25,000) por encima. Es el contraste con una sola agencia, no una validación.
 
-![Zonas más caras según las inmobiliarias](../graficos/entrevistas/inmob_zonas_caras.png)
+![Zonas más caras según las inmobiliarias](inmob_zonas_caras.png)
 
 **26. ¿Qué obstáculos legales frenan las ventas?**
 Según una inmobiliaria: títulos no actualizados o que no coinciden con la casa (ampliaciones sin registrar), herencias sin declaratoria de herederos, casas sin inscribir en el Registro de la Propiedad y litigios o cargas (usufructos, embargos). Otra señala el cheque de gerencia como forma de pago. La Ley 187/2026, según la prensa, añade notario y pago sin efectivo. Son testimonios: los anuncios no los muestran, y por eso el precio publicado no incluye el costo ni el riesgo del trámite.
@@ -188,21 +194,27 @@ Según una inmobiliaria: títulos no actualizados o que no coinciden con la casa
 **27. ¿Lo que se ofrece es lo que la gente prefiere?**
 No del todo. 28 de 35 personas (80%) prefieren la casa independiente; solo 3 el apartamento y 4 la biplanta. En Revolico, apenas 41% de los anuncios son casas y 50% apartamentos. Una inmobiliaria dice tener 65% de casas en su catálogo de 230 viviendas, pero es una cifra de la entrevista que no he podido verificar.
 
-![Tipo de vivienda: ofertado frente a preferido](../graficos/grafico_16_oferta_vs_preferencia.png)
+![Tipo de vivienda: ofertado frente a preferido](grafico_16_oferta_vs_preferencia.png)
+
+![Tipo de vivienda que prefieren las personas](personas_3_p3_tipo.png)
+
+![Composición del catálogo de una inmobiliaria](inmob_catalogo.png)
 
 **28. ¿Lo que valoran las personas coincide con lo que dicen los anuncios?**
 No. Las personas ponen por delante los servicios básicos (18 de 35) a la ubicación (13 de 35), y como servicio indispensable el agua (23 de 34), frente a la luz (7) y el gas (7). En los anuncios aparece más el gas (28%) y el teléfono (25%) que el agua (21%) o la luz (15%), e Internet no aparece. Este es quizás el hallazgo más interesante del trabajo: el mercado publica lo que es fácil de decir, no lo que más pesa para quien compra.
 
-![Qué valoran las personas al buscar vivienda](../graficos/entrevistas/personas_1_p1_valora.png)
+![Qué valoran las personas al buscar vivienda](personas_1_p1_valora.png)
 
-![Servicio indispensable según las personas](../graficos/entrevistas/personas_4_p4_servicio.png)
+![Servicio indispensable según las personas](personas_4_p4_servicio.png)
+
+![Servicio más valorado según las inmobiliarias](inmob_servicio.png)
 
 **29. ¿La gente sabe cuáles son las zonas más caras, y qué cree que pasa con los precios?**
 Lo sabe. Playa (18 de 33) y Vedado (17 de 33) quedan casi empatados como la zona más cara. En los datos, el Vedado tiene la mediana más alta (80,000 USD) y Playa le sigue (55,000). Sobre la evolución, 15 de 33 creen que los precios suben, 9 que bajan y 9 que se mantienen: no hay consenso claro, y no puedo contrastarlo porque tengo una sola extracción.
 
-![Zona que las personas creen más cara](../graficos/entrevistas/personas_2_p2_zona_cara.png)
+![Zona que las personas creen más cara](personas_2_p2_zona_cara.png)
 
-![Cómo ven las personas la evolución de los precios](../graficos/entrevistas/personas_5_p5_precios.png)
+![Cómo ven las personas la evolución de los precios](personas_5_p5_precios.png)
 
 **30. ¿Qué determina, entonces, el precio de una vivienda en La Habana?**
 La respuesta está en las páginas que siguen.
@@ -241,8 +253,13 @@ La respuesta honesta tiene varios niveles, del más firme al menos firme.
 - Precios de oferta, no de cierre.
 - Entrevistas por conveniencia, con dos versiones del cuestionario para inmobiliarias; solo una dio cifras de cierre. Las inmobiliarias tienen interés comercial.
 - Unas 25 comparaciones estadísticas con grupos pequeños; algunas "significativas" pueden ser casualidad.
-- Una respuesta en audio de una inmobiliaria todavía no está transcrita ni incluida.
+- Solo una inmobiliaria compartió su catálogo; las cifras de catálogo de las demás son lo que dijeron en la entrevista.
 - No hay datos de Facebook ni Telegram.
 
 ## Y ahora, ¿qué sigue?
 Para una segunda etapa haría falta anotar la superficie, la antigüedad y el precio final de cierre, repetir la extracción en otra fecha y entrevistar a más inmobiliarias con un cuestionario único. El informe técnico explica el método completo, y el repositorio contiene los datos, el código y los gráficos para reproducir cada cifra.
+
+## Epílogo: lo que aprendí
+Empecé buscando una lista de características que explicara el precio de una casa, y terminé aprendiendo algo más útil: que un dato no vale por lo que dice, sino por cuánto puedes confiar en él. El primer promedio que calculé estaba equivocado, la mejor respuesta resultó ser una mediana, y la variable más importante no fue el garaje ni la terraza, sino el barrio.
+
+También aprendí a escuchar lo que los datos no dicen. Los anuncios callan el agua que no llega, la emigración que empuja a vender y el trámite que frena el cierre, y justo eso es lo que las personas y las inmobiliarias cuentan cuando se les pregunta. La próxima vez que alguien diga cuánto vale una casa, voy a preguntarle primero dónde está, y después, qué es lo que el anuncio no cuenta.

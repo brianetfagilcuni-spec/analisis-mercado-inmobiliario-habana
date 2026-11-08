@@ -7,7 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("datos/limpios/inmuebles_habana_pro.csv")
+df = pd.read_csv("inmuebles_habana_pro.csv")
 
 # ---------- 1. Precio: original vs corregido ----------
 def precio_real(txt, fallback):
@@ -64,14 +64,14 @@ resumen = pd.DataFrame([
  ("Precio mediano corregido (USD)", base.median()),
  ("Precio mediano corregido sin duplicados (USD)", sin_dup.median()),
 ], columns=["indicador", "valor"])
-resumen.to_csv("datos/limpios/auditoria_resumen.csv", index=False)
+resumen.to_csv("auditoria_resumen.csv", index=False)
 print(resumen.to_string(index=False))
 
 # ---------- 5. Guardar dataset auditado (sin descripciones ni teléfonos) ----------
 cols = ["Título", "Tipo_Inmueble", "Zona_Limpia", "Municipio", "Precio_original", "Precio_corregido",
         "flag_precio_corregido", "flag_precio_ambiguo", "flag_zona_distinta", "flag_zona_sin_asignar",
         "flag_duplicado", "flag_sin_detalle", "Enlace"]
-df[cols].to_csv("datos/limpios/inmuebles_auditados.csv", index=False)
+df[cols].to_csv("inmuebles_auditados.csv", index=False)
 
 azul, rojo = "#2a5298", "#c0392b"
 
@@ -84,7 +84,7 @@ for i, (v, k) in enumerate(zip(g["median"], g["count"])):
     plt.text(v, i, f" ${v:,.0f} (n={k})", va="center", fontsize=8)
 plt.xlim(0, g["median"].max() * 1.3)
 plt.title("Precio mediano por municipio de Revolico (USD)\nmunicipios con 3 o más anuncios")
-plt.tight_layout(); plt.savefig("graficos/grafico_10_municipio.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_10_municipio.png", dpi=130); plt.close()
 
 # ---------- 7. Gráfico 11: problemas encontrados ----------
 prob = pd.Series({
@@ -101,7 +101,7 @@ for i, v in enumerate(prob.values):
     plt.text(v, i, f" {int(v)} ({v / n * 100:.0f}%)", va="center", fontsize=9)
 plt.xlim(0, prob.max() * 1.3)
 plt.title(f"Problemas de calidad detectados ({n} anuncios)")
-plt.tight_layout(); plt.savefig("graficos/grafico_11_auditoria.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_11_auditoria.png", dpi=130); plt.close()
 
 # ---------- 8. Gráfico 12: sensibilidad de la mediana y el promedio ----------
 versiones = ["Original\n(sin corregir)", "Corregido", "Corregido\nsin duplicados"]
@@ -116,10 +116,10 @@ for i in range(3):
     plt.text(x[i] + 0.2, prom[i], f"{prom[i]:,.0f}", ha="center", va="bottom", fontsize=8)
 plt.xticks(x, versiones); plt.ylabel("USD"); plt.legend()
 plt.title("La mediana es estable; el promedio no")
-plt.tight_layout(); plt.savefig("graficos/grafico_12_sensibilidad.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_12_sensibilidad.png", dpi=130); plt.close()
 
 # ---------- 9. Triangulación con una segunda extracción ----------
-c = pd.read_csv("datos/crudos/revolico_casas.csv")
+c = pd.read_csv("revolico_casas.csv")
 c = c[c["Precio"].notna()].copy()
 c["Precio"] = pd.to_numeric(c["Precio"], errors="coerce")
 excluir = c["Título"].str.contains(r"compro|gestor|renta|pistola|encuentra tu|permuto", case=False, regex=True)
@@ -134,7 +134,7 @@ tri = pd.DataFrame({
     "p75": [a.quantile(.75), b.quantile(.75)],
     "promedio": [a.mean(), b.mean()],
 }).round(0)
-tri.to_csv("datos/limpios/triangulacion.csv", index=False)
+tri.to_csv("triangulacion.csv", index=False)
 print(tri.to_string(index=False), "| descartados de la 2a:", descartados)
 
 plt.figure(figsize=(7, 4.5))
@@ -144,5 +144,5 @@ plt.xscale("log")
 plt.yticks([1, 2], [f"Extracción 1\n(n={len(a)})", f"Extracción 2\n(n={len(b)})"])
 plt.xlabel("Precio USD (escala log)")
 plt.title("Triangulación: dos extracciones de Revolico")
-plt.tight_layout(); plt.savefig("graficos/grafico_13_triangulacion.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_13_triangulacion.png", dpi=130); plt.close()
 print("Listo")

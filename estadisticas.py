@@ -1,6 +1,6 @@
 """Estadísticas de los anuncios y de las entrevistas. Ejecutar desde la raíz del repositorio:
-    python codigo/estadisticas.py
-Salidas: datos/limpios/estadisticas.csv y graficos/grafico_14..16.
+    python estadisticas.py
+Salidas: estadisticas.csv y grafico_14..16.
 Reglas: precio corregido; mediana (no promedio); con menos de 5 anuncios en un grupo no se concluye."""
 import re
 import numpy as np
@@ -11,8 +11,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 rng = np.random.default_rng(42)
-d = pd.read_csv("datos/limpios/inmuebles_habana_pro.csv")
-a = pd.read_csv("datos/limpios/inmuebles_auditados.csv")
+d = pd.read_csv("inmuebles_habana_pro.csv")
+a = pd.read_csv("inmuebles_auditados.csv")
 d["Precio"] = a["Precio_corregido"].values
 d["Municipio"] = a["Municipio"].values
 d["flag_dup"] = a["flag_duplicado"].values
@@ -47,7 +47,7 @@ print("sin duplicados: n=%d mediana=%.0f" % ((~d.flag_dup).sum(), d.loc[~d.flag_
 # ---- Municipio ----
 m = d.groupby("Municipio")["Precio"].agg(n="count", mediana="median", q1=lambda x: x.quantile(.25), q3=lambda x: x.quantile(.75)).sort_values("mediana", ascending=False)
 print(m)
-m.to_csv("datos/limpios/estadisticas_municipio.csv")
+m.to_csv("estadisticas_municipio.csv")
 comparar("Plaza de la Revolución vs resto", d.Municipio == "Plaza de la Revolución")
 comparar("Playa vs resto", d.Municipio == "Playa")
 alta = d.Municipio.isin(["Plaza de la Revolución", "Playa", "Habana del Este"])
@@ -98,13 +98,13 @@ reg = []
 for k, v in modelos.items():
     r2, b = r2aj(v); reg.append((k, round(r2, 3), [round(float(x), 2) for x in b]))
     print(k, round(r2, 3), [round(float(x), 2) for x in b])
-pd.DataFrame([(k, r) for k, r, _ in reg], columns=["modelo", "r2_ajustado"]).to_csv("datos/limpios/estadisticas_modelos.csv", index=False)
+pd.DataFrame([(k, r) for k, r, _ in reg], columns=["modelo", "r2_ajustado"]).to_csv("estadisticas_modelos.csv", index=False)
 # ¿qué pasa con los servicios dentro de la misma zona?
 print("Mediana por n_serv dentro de zona alta / resto:")
 print(d.groupby(["zona_alta", pd.cut(d.n_serv, [-1, 0, 1, 10])])["Precio"].agg(["count", "median"]))
 
 res = pd.DataFrame(filas)
-res.to_csv("datos/limpios/estadisticas.csv", index=False)
+res.to_csv("estadisticas.csv", index=False)
 print(res.to_string())
 
 # ---- Palabras en los anuncios ----
@@ -123,7 +123,7 @@ plt.boxplot([d[d.Municipio == k]["Precio"] for k in orden], vert=False, showflie
 plt.yticks(range(1, len(orden) + 1), [f"{k} (n={m.loc[k,'n']})" for k in orden])
 plt.xscale("log"); plt.xlabel("Precio publicado (USD, escala logarítmica)")
 plt.title("Dispersión del precio por municipio (solo municipios con 5 o más anuncios)")
-plt.tight_layout(); plt.savefig("graficos/grafico_14_cajas_municipio.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_14_cajas_municipio.png", dpi=130); plt.close()
 
 # G15: precio mediano con / sin cada servicio
 srvs = ["Agua", "Luz", "Gas", "Garaje", "Patio", "Placa_Libre", "Independiente", "Teléfono"]
@@ -133,10 +133,10 @@ x = np.arange(len(srvs)); plt.figure(figsize=(8.5, 5))
 plt.bar(x - .2, con, .4, color=azul, label="Anuncio lo menciona"); plt.bar(x + .2, sin, .4, color=gris, label="No lo menciona")
 plt.xticks(x, [f"{c}\n(n={n})" for c, n in zip(srvs, ns)], fontsize=8); plt.ylabel("Mediana (USD)")
 plt.title("Precio mediano según lo que menciona el anuncio\n(diferencias no concluyentes si n pequeño; ver estadisticas.csv)")
-plt.legend(); plt.tight_layout(); plt.savefig("graficos/grafico_15_servicios_precio.png", dpi=130); plt.close()
+plt.legend(); plt.tight_layout(); plt.savefig("grafico_15_servicios_precio.png", dpi=130); plt.close()
 
 # G16: lo que se ofrece vs lo que se prefiere
-P = pd.read_csv("entrevistas/personas.csv")
+P = pd.read_csv("personas.csv")
 pref = P["p3_tipo"].dropna().str[0].value_counts(normalize=True) * 100
 oferta = d["Tipo_Inmueble"].replace({"Biplanta": "Biplanta"}).value_counts(normalize=True) * 100
 cats = ["Casa", "Apartamento", "Biplanta"]
@@ -147,7 +147,7 @@ plt.bar(x + .2, v_pr, .4, color="#e07b39", label=f"Preferido por personas (n={P[
 for i, (u, w) in enumerate(zip(v_of, v_pr)):
     plt.text(i - .2, u + 1, f"{u:.0f}%", ha="center", fontsize=9); plt.text(i + .2, w + 1, f"{w:.0f}%", ha="center", fontsize=9)
 plt.xticks(x, cats); plt.ylabel("%"); plt.title("Tipo de vivienda: lo que se ofrece vs. lo que se prefiere")
-plt.legend(); plt.tight_layout(); plt.savefig("graficos/grafico_16_oferta_vs_preferencia.png", dpi=130); plt.close()
+plt.legend(); plt.tight_layout(); plt.savefig("grafico_16_oferta_vs_preferencia.png", dpi=130); plt.close()
 
 # ---- Personas: conteos ----
 def cuenta(col, letras):

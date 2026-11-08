@@ -1,12 +1,12 @@
-"""Genera informe/informe/informe_inmobiliario.html con los datos corregidos y los gráficos incrustados."""
+"""Genera informe_inmobiliario.html con los datos corregidos y los gráficos incrustados."""
 import re, base64, datetime
 import pandas as pd
 
-df = pd.read_csv("datos/limpios/con_clusters.csv")
+df = pd.read_csv("con_clusters.csv")
 
-aud = pd.read_csv("datos/limpios/inmuebles_auditados.csv")
-res = pd.read_csv("datos/limpios/auditoria_resumen.csv").set_index("indicador")["valor"]
-tri = pd.read_csv("datos/limpios/triangulacion.csv")
+aud = pd.read_csv("inmuebles_auditados.csv")
+res = pd.read_csv("auditoria_resumen.csv").set_index("indicador")["valor"]
+tri = pd.read_csv("triangulacion.csv")
 gm = aud.groupby("Municipio")["Precio_corregido"].agg(["median", "count"])
 gm = gm[gm["count"] >= 5].sort_values("median", ascending=False)
 n = len(df)
@@ -51,10 +51,10 @@ secciones = [
 ]
 
 bloques = "".join(
-    f'<div class="card"><h2>{i}. {t}</h2><img src="{img("graficos/grafico_"+f)}" alt="{t}"><div class="concl">{c}</div></div>'
+    f'<div class="card"><h2>{i}. {t}</h2><img src="{img("grafico_"+f)}" alt="{t}"><div class="concl">{c}</div></div>'
     for i, (t, f, c) in enumerate(secciones, 1))
 
-perfil = pd.read_csv("datos/limpios/perfil_clusters.csv")
+perfil = pd.read_csv("perfil_clusters.csv")
 tabla = "<table><tr>" + "".join(f"<th>{c}</th>" for c in perfil.columns) + "</tr>" + "".join(
     "<tr>" + "".join(f"<td>{v:,.1f}</td>" if isinstance(v, float) else f"<td>{v}</td>" for v in fila) + "</tr>"
     for fila in perfil.itertuples(index=False)) + "</table>"
@@ -101,5 +101,5 @@ La versión anterior del informe tenía errores de precio (por ejemplo 560,000 U
 Muestra pequeña ({n} anuncios, una sola extracción). Varias zonas tienen muy pocos anuncios. La zona se leyó del texto del anuncio y algunos de Guanabo aparecen como Playa. Los precios son de oferta, no de cierre. Hay anuncios casi duplicados. Las entrevistas a personas e inmobiliarias están en proceso y se agregarán de forma anónima. El proceso completo está en <code>notebook_analisis.ipynb</code>.</div>
 <footer>Proyecto de Ciencia de Datos · Fuente: Revolico.com</footer>
 </div></body></html>"""
-open("informe/informe_inmobiliario.html", "w", encoding="utf-8").write(html)
+open("informe_inmobiliario.html", "w", encoding="utf-8").write(html)
 print("Informe generado")

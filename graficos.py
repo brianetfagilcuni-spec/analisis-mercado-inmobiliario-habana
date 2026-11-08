@@ -5,7 +5,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # 1. Cargar
-df = pd.read_csv("datos/limpios/inmuebles_habana_pro.csv")
+df = pd.read_csv("inmuebles_habana_pro.csv")
 
 # 2. Corregir precio: tomar el precio real del texto del anuncio
 def precio_real(txt, fallback):
@@ -33,21 +33,21 @@ for i, (v, n) in enumerate(zip(g["median"], g["count"])):
     plt.text(v, i, f" ${v:,.0f} (n={n})", va="center", fontsize=8)
 plt.title("Precio mediano por zona (USD)")
 plt.xlim(0, g["median"].max() * 1.25)
-plt.tight_layout(); plt.savefig("graficos/grafico_1_precio_por_zona.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_1_precio_por_zona.png", dpi=130); plt.close()
 
 # G2: categoría de precio
 c = df["Categoria_Precio"].value_counts().reindex(df["Categoria_Precio"].cat.categories)
 plt.figure(figsize=(6, 6))
 plt.pie(c, labels=c.index, autopct="%1.0f%%", startangle=90)
 plt.title("Categoría de precio")
-plt.tight_layout(); plt.savefig("graficos/grafico_2_categoria_precio.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_2_categoria_precio.png", dpi=130); plt.close()
 
 # G3: tipo de inmueble
 t = df["Tipo_Inmueble"].value_counts()
 plt.figure(figsize=(7, 5))
 plt.bar(t.index, t.values, color="#8e44ad")
 plt.title("Anuncios por tipo de inmueble")
-plt.tight_layout(); plt.savefig("graficos/grafico_3_tipo_inmueble.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_3_tipo_inmueble.png", dpi=130); plt.close()
 
 # G4: servicios
 sv = ["Agua", "Luz", "Gas", "Teléfono", "Internet"]
@@ -55,7 +55,7 @@ s = (df[sv] == "Sí").sum()
 plt.figure(figsize=(7, 5))
 plt.bar(s.index, s.values, color="#27ae60")
 plt.title("Anuncios que mencionan cada servicio")
-plt.tight_layout(); plt.savefig("graficos/grafico_4_servicios.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_4_servicios.png", dpi=130); plt.close()
 
 # G5: características
 ca = ["Patio", "Terraza", "Balcon", "Jardín", "Piscina", "Garaje", "Vista_al_mar", "Placa_Libre", "Independiente"]
@@ -63,7 +63,7 @@ k = (df[ca] == "Sí").sum().sort_values()
 plt.figure(figsize=(7, 5))
 plt.barh(k.index, k.values, color="#e67e22")
 plt.title("Características más mencionadas")
-plt.tight_layout(); plt.savefig("graficos/grafico_5_caracteristicas.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_5_caracteristicas.png", dpi=130); plt.close()
 
 # G6: histograma de precios (escala log)
 plt.figure(figsize=(7, 5))
@@ -71,5 +71,5 @@ plt.hist(df["Precio"], bins=[1e3,3e3,6e3,1e4,2e4,4e4,8e4,2e5,8e5], color=azul, e
 plt.xscale("log")
 plt.title("Distribución de precios (escala log)")
 plt.xlabel("USD")
-plt.tight_layout(); plt.savefig("graficos/grafico_6_distribucion_precios.png", dpi=130); plt.close()
+plt.tight_layout(); plt.savefig("grafico_6_distribucion_precios.png", dpi=130); plt.close()
 print("Listo")
